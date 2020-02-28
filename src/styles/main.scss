@@ -1,0 +1,80 @@
+.bold {
+  font-weight: bold;
+}
+
+.padding {
+  padding: 2px;
+}
+
+.flex {
+  display: flex;
+  justify-content: space-between;
+}
+
+.flexer {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.spacer {
+  height: 10px;
+  width: 10px;
+}
+
+//! battle royale styling
+
+div.wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+div.grid {
+  margin: 5px;
+  // width: 720px;
+  // height: 720px;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+div.grid-item {
+  width: 14.4px;
+  height: 14.4px;
+  border: 0.5px dashed black;
+  font-size: 7px;
+}
+
+.pokemon {
+  background-color: green;
+}
+
+div.grid-item.player {
+  background-color: red;
+  padding: 0;
+  // background-image: url('../assets/elf.png');
+  // background-repeat: no-repeat;
+  // background-size: contain;
+  // background-position: center;
+}
+
+div.grid-item.pokeIndex {
+  background-color: red;
+  padding: 0;
+}
+
+.playerImage {
+  position: absolute;
+  padding: 0;
+  margin: 0;
+  vertical-align: top;
+  // clip: rect(40px,60px,200px,0px);
+}
+
+.pokeImage {
+  position: absolute;
+  padding: 0;
+  margin: 0;
+  vertical-align: top;
+  // clip: rect(40px,60px,200px,0px);
+}
