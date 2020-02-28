@@ -1,9 +1,12 @@
 import React from 'react'
 class BattleRoyale extends React.Component {
   state = {
+    count: 0,
     game: 'test',
+    gridBuilt: false,
     gameActive: false,
     width: 30,
+    squareHeight: 14.4,
     grid: [],
     playerIndex: 53,
     staged: [{ name: 'bulbasaur', id: '1', frontImg: './../assets/1/front.gif', backImg: './../assets/1/back.gif', hp: 45, attack: 49, defence: 49, spAt: 65, spDf: 65, speed: 45, type1: 'poison', type2: 'grass', shape: 'quadruped', height: 7, eggGroup: 'plant', isBaby: false, generation: 'generation-i', description: 'Bulbasaur can be seen napping in bright sunlight. There is a seed on its back. By soaking up the sun’s rays, the seed grows progressively larger.' },
@@ -29,11 +32,27 @@ class BattleRoyale extends React.Component {
     // gameActive: false
   }
   async componentDidMount() {
-    this.setState({
-      game: 'test2'
-    })
+    console.log('component did mount')
   } catch(err) {
     console.log(err)
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.myInterval)
+    const { deployed } = this.state
+
+    Object.keys(deployed).map(_id => {
+      const pokemon = deployed[_id]
+      const { pokeTimerId } = pokemon
+      clearInterval(pokeTimerId)
+      this.pokeTimer = clearInterval(() => {
+        this.setState({
+          pokeTimerId
+        })
+      }) 
+
+    })
+    console.log('component will unmount')
   }
 
 
@@ -41,16 +60,17 @@ class BattleRoyale extends React.Component {
     const { grid, width, deployed, staged } = this.state
     let i = 0
     for (i = 0; i < (width * width); i++) {
-      grid.push(['grid-item'])
+      // grid.push(['grid-item'])
+      grid.push([])
     }
     this.deployPokemon(grid, deployed, staged)
     console.log('deployed in buildgame =', deployed)
-    this.movePokemon(grid, deployed)
+    // this.movePokemon(grid, deployed)
     this.setState({
       grid,
       deployed,
       staged,
-      gameActive: true
+      gridBuilt: true
     })
   }
 
@@ -123,23 +143,48 @@ class BattleRoyale extends React.Component {
     // it will also need to determine the correct size of the pokemon
   }
 
-  movePokemon(grid, deployed){
-    Object.keys(deployed).map(pokemon => {
-      const pokeObject = deployed[pokemon]
-      // const counter = 0
-      this.chooseDirection(grid, pokeObject)
-      // const timerId = setInterval(this.timer(pokeObject, counter), 1000)
-      
-      // const timerId = setInterval(this.chooseDirection(grid, pokeObject), pokemon.pokeSpeed)
-
-      // deployed[pokemon].timerIdArray.push(timerId)
+  activatePokemon = () => {
+    const { gridBuilt, grid, deployed } = this.state
+    this.setState({
+      gameActive: true
     })
-  }
+    
+    Object.keys(deployed).map(_id => {
+      const pokemon = deployed[_id]
+      const { pokeTimerId } = pokemon
+      // console.log(pokemon.name, 'is active')
+      this.chooseDirection(grid, pokemon)
+      //! below is the timer array function, I will move all of the above functions under setInterval once I'm confident they all work
+      // if (gridBuilt) {
+      //   this.pokeTimer = setInterval(() => {
+      //     console.log(pokemon.name, 'is active')
+      //     this.setState({
+      //       pokeTimerId
+      //     })
+      //   }, 3000)  
+      // }
+    })
+    ///////////////////////////
 
-  timer(pokemon, counter){
-    counter++
-    console.log(pokemon.name, counter)
-    // this.setState({ counter }
+
+    // const counter = 0
+    // this.chooseDirection(grid, pokeObject)
+    // const timerId = setInterval(this.timer(pokeObject, counter), 1000)
+      
+    // const timerId = setInterval(this.chooseDirection(grid, pokeObject), pokemon.pokeSpeed)
+
+    // deployed[pokemon].timerIdArray.push(timerId)
+    // })
+
+    //! below is the counter function: it's really just a proof of concept
+    // if (gridBuilt) {
+    //   this.myInterval = setInterval(() => {
+    //     console.log(this.state.count)
+    //     this.setState({
+    //       count: this.state.count + 1
+    //     })
+    //   }, 1000)  
+    // }
   }
 
   chooseDirection(grid, pokemon) {
@@ -154,23 +199,28 @@ class BattleRoyale extends React.Component {
   findTargets(grid, pokemon){
     const { pokeIndex, pokeHeight, _id, name } = pokemon
     const { width } = this.state
-    const limitsArray = this.findGridLimits(grid, pokeIndex)
+    // console.log('before grid limits')
+    const limitsArray = this.findGridLimits(grid, pokeIndex, pokeHeight)
+    // console.log('after grid limits')
+    // console.log('limitsarray', pokemon.name, limitsArray)
     const farIndex = pokeIndex + ((pokeHeight - 1) + ((pokeHeight - 1) * width))
-    // console.log(pokemon.name, pokeIndex, limitsArray)
 
     const closeProximity = []
     let idArray = []
+    // console.log('before proximityFinder')
     this.proximityFinder(2, limitsArray, pokeIndex, farIndex, width, closeProximity)
+    // console.log('after proximityFinder')
+    // console.log(pokemon.name, closeProximity)
 
     if (!this.checkMove(grid, closeProximity, 'pokemon', _id)){
 
-      console.log(name)
+      console.log(name, 'has other pokemon near')
 
       idArray = closeProximity.map((item) => {
         if (grid[item].includes('pokemon') && !grid[item].includes(_id)) {
           return grid[item].reduce((acc2, string) => {
             if (string.startsWith('id_')){
-              return acc2 = string
+              acc2 = string
             }
             return acc2
           })
@@ -178,7 +228,7 @@ class BattleRoyale extends React.Component {
       })
       idArray = idArray.filter(item => item.startsWith('id_'))
     }
-    console.log('idArray', idArray)
+    console.log('after idArray function', idArray)
   }
   
   
@@ -200,34 +250,37 @@ class BattleRoyale extends React.Component {
   }
 
   //! this returns an array [top, bottom, left, right] of number of squares to the edge of the grid
-  findGridLimits(grid, index){
+  findGridLimits(grid, index, pokeHeight){
     const { width } = this.state
-    let leftCount = -1
-    let rightCount = -1
-    let upCount = -1
-    let downCount = -1
-    let indexMove = index
+    const row = Math.ceil((index + 1) / width)
+    const column = width - (((width * width) - (index + 1)) % width)
+    // console.log('row', row, 'column', column)
+    const leftCount = column - 1
+    const rightCount = width - column - (pokeHeight - 1)
+    const upCount = row - 1
+    const downCount = width - row - (pokeHeight - 1)
+    // let indexMove = index
     
-    while (indexMove % width < width - 1) {
-      indexMove--
-      leftCount++
-    }
-    indexMove = index
-    while (indexMove % width > 0) {
-      indexMove++
-      rightCount++
-    }
-    indexMove = index
-    while (grid[indexMove]) {
-      indexMove -= width
-      upCount++
-    } 
-    indexMove = index
-    while (grid[indexMove]) {
-      indexMove += width
-      downCount++
-    }
-    indexMove = index
+    // while (indexMove % width < width - 1) {
+    //   indexMove--
+    //   leftCount++
+    // }
+    // indexMove = index
+    // while (indexMove % width > 0) {
+    //   indexMove++
+    //   rightCount++
+    // }
+    // indexMove = index
+    // while (grid[indexMove]) {
+    //   indexMove -= width
+    //   upCount++
+    // } 
+    // indexMove = index
+    // while (grid[indexMove]) {
+    //   indexMove += width
+    //   downCount++
+    // }
+    // indexMove = index
   
     return [upCount, downCount, leftCount, rightCount]
   }
@@ -374,7 +427,7 @@ class BattleRoyale extends React.Component {
     this.pushBlock(pokeIndex - width, pokeIndex - width + pokeHeight - 1, top)
     this.pushBlock(pokeIndex + (width * pokeHeight), farIndex + width, bottom)
   }
-
+  //! Note: this function has been altered without being tested, see version in pokemon unlimited if need to revert
   checkMove(grid, direction, classN, _id) {
     const arr = direction.map((item) => {
       return !grid[item].includes(classN) || grid[item].includes(_id)
@@ -384,7 +437,7 @@ class BattleRoyale extends React.Component {
         acc = item
       }
       return acc
-    })
+    }, true)
     // console.log(go)
     return go
   }
@@ -509,7 +562,7 @@ class BattleRoyale extends React.Component {
   }
 
   render() {
-    const { grid, playerIndex, testmon, gameActive, width } = this.state
+    const { grid, playerIndex, testmon, gameActive, gridBuilt, width, squareHeight, count } = this.state
     // if (!grid[0]) return null
     // console.log(grid)
     // console.log(e.keyCode)
@@ -517,13 +570,15 @@ class BattleRoyale extends React.Component {
     return (
       < >
         <input type="text" id="one" onKeyDown={this.handleKeyDown} />
-        {gameActive ? '' : <button onClick={this.buildGame}>Start Game</button>}
+        {gridBuilt ? '' : <button onClick={this.buildGame}>Build Game</button>}
+        {(gameActive || !gridBuilt) ? '' : <button onClick={this.activatePokemon}>Start Game</button>}
+    <h1>Current count {count}</h1>
         {/* <button onClick={this.movePlayerRight}>movePlayerRight</button> */}
         <div className="wrapper">
           {grid[0] ?
-            <div className="grid" style={{ height: `${width * 14.4}px`, width: `${width * 14.4}px` }}>
+            <div className="grid" style={{ height: `${width * squareHeight}px`, width: `${width * squareHeight}px` }}>
               {/* {grid.map((item, i) => <div key={i.toString()} className={item.reduce((a, c) => a + ' ' + c)}>{i.toString()}</div>)} */}
-              {grid.map((item, i) => <div key={i.toString()} className={item.reduce((a, c) => a + ' ' + c)}>{item.includes('player') ? <img className="playerImage" src={testmon.frontImg} /> : ''}{item.includes('pokeIndex') ? <img className="pokeImage" src={this.findImage(item)} style={{ height: `${this.findPokeProp(item, 'pokeHeight') * 14.4}px` }}/> : ''}</div>)}
+              {grid.map((item, i) => <div key={i.toString()} style={{ width: `${squareHeight}px`, height: `${squareHeight}px`, border: '0.5px dashed black' }} className={item[0] ? item.reduce((a, c) => a + ' ' + c) : ''}>{item.includes('player') ? <img className="playerImage" src={testmon.frontImg} /> : ''}{item.includes('pokeIndex') ? <img className="pokeImage" src={this.findImage(item)} style={{ height: `${this.findPokeProp(item, 'pokeHeight') * squareHeight}px` }}/> : ''}</div>)}
             </div>
             : null
           }
