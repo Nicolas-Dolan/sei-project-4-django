@@ -24,9 +24,12 @@ class BattleRoyale extends React.Component {
       { name: 'squirtle', id: '7', frontImg: './../assets/7/front.gif', backImg: './../assets/7/back.gif', hp: 44, attack: 48, defence: 65, spAt: 50, spDf: 64, speed: 43, type1: 'water', type2: 'null', shape: 'upright', height: 5, eggGroup: 'water1', isBaby: false, generation: 'generation-i', description: 'Squirtle’s shell is not merely used for protection. The shell’s rounded shape and the grooves on its surface help minimize resistance in water, enabling this Pokémon to swim at high speeds.' },
     
       { name: 'wartortle', id: '8', frontImg: './../assets/8/front.gif', backImg: './../assets/8/back.gif', hp: 59, attack: 63, defence: 80, spAt: 65, spDf: 80, speed: 58, type1: 'water', type2: 'null', shape: 'upright', height: 10, eggGroup: 'water1', isBaby: false, generation: 'generation-i', description: 'Its tail is large and covered with a rich, thick fur. The tail becomes increasingly deeper in color as Wartortle ages. The scratches on its shell are evidence of this Pokémon’s toughness as a battler.' },
+
+      // { name: 'mewtwo', id: '150', frontImg: './../assets/150/front.gif', backImg: './../assets/150/back.gif', hp: 106, attack: 110, defence: 90, spAt: 154, spDf: 90, speed: 130, type1: 'psychic', type2: 'null', shape: 'upright', height: 20, eggGroup: 'no-eggs', isBaby: false, generation: 'generation-i', description: 'Mewtwo is a Pokémon that was created by genetic manipulation. However, even though the scientific power of humans created this Pokémon’s body, they failed to endow Mewtwo with a compassionate heart.' },
     
       { name: 'blastoise', id: '9', frontImg: './../assets/9/front.gif', backImg: './../assets/9/back.gif', hp: 79, attack: 83, defence: 100, spAt: 85, spDf: 105, speed: 178, type1: 'water', type2: 'null', shape: 'upright', height: 16, eggGroup: 'water1', isBaby: false, generation: 'generation-i', description: 'Blastoise has water spouts that protrude from its shell. The water spouts are very accurate. They can shoot bullets of water with enough accuracy to strike empty cans from a distance of over 160 feet.' }],
     deployed: {},
+    benched: {},
     testmon: { name: 'venusaur', _id: '111', id: '3', frontImg: './../assets/4/front.gif', backImg: './../assets/4/back.gif', hp: 80, attack: 82, defence: 83, spAt: 100, spDf: 100, speed: 80, type1: 'poison', type2: 'grass', shape: 'quadruped', height: 6, description: ',There is a large flower on Venusaur’s back. The flower is said to take on vivid colors if it gets plenty of nutrition and sunlight. The flower’s aroma soothes the emotions of people.,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,' }
 
     // gameActive: false
@@ -57,13 +60,13 @@ class BattleRoyale extends React.Component {
 
 
   buildGame = () => {
-    const { grid, width, deployed, staged } = this.state
+    const { grid, width, deployed, staged, benched } = this.state
     let i = 0
     for (i = 0; i < (width * width); i++) {
       // grid.push(['grid-item'])
       grid.push([])
     }
-    this.deployPokemon(grid, deployed, staged)
+    this.deployPokemon(grid, deployed, staged, benched)
     console.log('deployed in buildgame =', deployed)
     // this.movePokemon(grid, deployed)
     this.setState({
@@ -72,13 +75,13 @@ class BattleRoyale extends React.Component {
       staged,
       gridBuilt: true
     })
-    console.log(this.state)
+    // console.log(this.state)
   }
 
-  deployPokemon(grid, deployed, staged) {
+  deployPokemon(grid, deployed, staged, benched) {
     this.placePlayer(grid)
     this.portPokemon(staged, deployed)
-    this.placePokemon(grid, deployed)
+    this.placePokemon(grid, deployed, benched)
     staged = []
   }
 
@@ -102,7 +105,7 @@ class BattleRoyale extends React.Component {
     })
   }
 
-  placePokemon(grid, deployed){
+  placePokemon(grid, deployed, benched){
     Object.keys(deployed).map(pokemon => {
       const { width } = this.state
       const pokeHeight = deployed[pokemon].pokeHeight
@@ -110,7 +113,7 @@ class BattleRoyale extends React.Component {
       let i = 0
       while (i < 10 && success === false) {
         i++
-        const possibleIndex = Math.floor(Math.random() * (grid.length - 1))
+        const possibleIndex = Math.floor(Math.random() * (grid.length - width))
         const farIndex = possibleIndex + ((pokeHeight - 1) + ((pokeHeight - 1) * width))
         const self = []
         this.pushBlock(possibleIndex, farIndex, self)
@@ -128,12 +131,21 @@ class BattleRoyale extends React.Component {
               deployed[pokemon].pokeIndex = possibleIndex
               deployed[pokemon].farIndex = farIndex
               deployed[pokemon].target = ['id placeholder', 'index placeholder', 'closeness placeholder']
-              deployed[pokemon].pokeTimerId = 'placeholder'
+              deployed[pokemon].pokeTimer = 'placeholder'
               deployed[pokemon].direction = this.randomDirection()
+              deployed[pokemon].attackCounter = 0
+              deployed[pokemon].currentHealth = deployed[pokemon].hp
+              deployed[pokemon].previousHealth = deployed[pokemon].hp
+              deployed[pokemon].damageReceived = 'none'
               success = true
             }
           }
         } 
+      }
+      if (!success){
+        benched[pokemon] = deployed[pokemon]
+        console.log(deployed[pokemon].name, 'was benched')
+        delete deployed[pokemon]
       }
 
       // the function will try up to ten times to place the pokemon
@@ -172,6 +184,7 @@ class BattleRoyale extends React.Component {
           // console.log('function', this.returnPlayerIndex())
           // console.log('state', this.state.playerIndex)
           // this.handleSetState(_id)
+          
           this.pokeAction(grid, pokemon)
           // this.makeMovement(_id, 'down')
           // this.setState({
@@ -181,6 +194,11 @@ class BattleRoyale extends React.Component {
           //   grid
           // })
         }, pokemon.pokeSpeed)  
+        // }, 2000) 
+        deployed[_id].pokeTimer = this.pokeTimer
+        this.setState({
+          deployed
+        })
       }
     })
     ///////////////////////////
@@ -206,35 +224,111 @@ class BattleRoyale extends React.Component {
     // }
   }
   
-  handleSetState(_id) {
-    const { deployed } = this.state
-    deployed[_id].pokeIndex++
-    this.setState({ deployed })
-    console.log(this.state.deployed[_id].pokeIndex)
-  }
+  // handleSetState(_id) {
+  //   const { deployed } = this.state
+  //   deployed[_id].pokeIndex++
+  //   this.setState({ deployed })
+  //   console.log(this.state.deployed[_id].pokeIndex)
+  // }
   
   
 
   pokeAction(grid, pokemon) {
-    let { target } = pokemon
-    console.log(pokemon.name)
+    let { target, _id } = pokemon
+    const { deployed } = this.state
+    // console.log(pokemon.name)
+    // console.log('top level pre target =', target)
     target = this.chooseTarget(grid, pokemon, target)
-    console.log('top level target =', target)
-    this.movePokemon(grid, pokemon, target)
+    // console.log('top level target =', target, this.state.deployed[target[0]].name)
+    const tarRelPos = this.targetRelPos(grid, pokemon, target)
+    const knockout = false
+    this.checkForDamage(pokemon, knockout)
+    if (!knockout) {
+      // if (Object.keys(deployed).length > 1) {
+      // console.log(Object.keys(deployed).length)
+      this.attackPokemon(pokemon, target, tarRelPos)
+      // }      
+      this.movePokemon(grid, pokemon, target, tarRelPos)
+    }
+    this.checkForDamage(pokemon)
+    // if (knockout){
+    //   delete deployed._id
+    //   this.setState({
+    //     deployed
+    //   })
+    // }
   }
 
-  movePokemon(grid, pokemon, target){
-    if (pokemon.attack <= pokemon.spAt){
-      this.charge(grid, pokemon, target)
+  checkForDamage(pokemon, knockout){
+    const { currentHealth, previousHealth, _id, pokeIndex, farIndex, damageReceived } = pokemon
+    const { deployed, grid } = this.state
+    // console.log('curr HP =', currentHealth, 'prev HP =', previousHealth)
+    if (currentHealth <= 0) {
+      // clearInterval(deployed[_id].pokeTimer)
+      grid[pokeIndex].splice(grid[pokeIndex].indexOf('pokeIndex'), 1)
+      this.eraseBlock(pokeIndex, farIndex, 'pokemon', grid)
+      this.eraseBlock(pokeIndex, farIndex, _id, grid)
+      console.log(pokemon.name, 'received', previousHealth - currentHealth, damageReceived, 'damage')
+      console.log(pokemon.name, 'has fainted')
+      this.setState({
+        grid
+      })
+      knockout = true
+      clearInterval(deployed[_id].pokeTimer)
+      return knockout
     }
   }
 
-  charge(grid, pokemon, target){
+  attackPokemon(pokemon, target, tarRelPos){
+    let { attackCounter } = pokemon
+    const { attack, type1, type2, _id } = pokemon
+    const { deployed } = this.state
+    const { defence } = deployed[target[0]]
+    const defTyp1 = deployed[target[0]].type1
+    const defTyp2 = deployed[target[0]].type2
+    
+    attackCounter++
+    deployed[_id].attackCounter = attackCounter
+
+    let attType = [type1, type2]
+    if (attType[1] === 'null'){
+      attType = attType[0]
+    } else {
+      attType = attType[Math.floor(Math.random() * 2)]
+    }
+
+    // console.log('attack counter =', attackCounter)
+    // console.log('targets typing is', defTyp1, defTyp2)
+    // console.log(pokemon.name, 'did', this.damageCalculator(attack, defence, attType, defTyp1, defTyp2), attType, 'damage against', deployed[target[0]].name, 'who is', tarRelPos[0], tarRelPos[1])
+    if (target[2] === 'close' && attackCounter > 3){
+      deployed[target[0]].previousHealth = deployed[target[0]].currentHealth
+      deployed[target[0]].currentHealth = deployed[target[0]].currentHealth - this.damageCalculator(attack, defence, attType, defTyp1, defTyp2)
+      deployed[target[0]].damageReceived = attType
+      deployed[_id].attackCounter = 0
+      console.log(pokemon.name, 'did', this.damageCalculator(attack, defence, attType, defTyp1, defTyp2), 'physical', attType, 'damage against', deployed[target[0]].name, tarRelPos[0], tarRelPos[1])
+    }
+    this.setState({ deployed })
+  }
+
+  damageCalculator(attack, defence, attType, defTyp1, defTyp2){
+    return Math.round(((((((2 * 50) / 5) + 2) * 80 * (attack / defence)) / 50) + 2) * this.effectiveness[attType][defTyp1] * this.effectiveness[attType][defTyp2])
+  }
+
+  movePokemon(grid, pokemon, target, tarRelPos){
+  //   if (pokemon.attack <= pokemon.spAt){
+  //     this.charge(grid, pokemon, target)
+  //   }
+  // }
+
+    // charge(grid, pokemon, target){
     const { width } = this.state
     const { pokeIndex, pokeHeight, _id, direction } = pokemon
-    const tarRelPos = this.targetRelPos(grid, pokemon, target)
-    console.log('tarRelPos =', tarRelPos)
+    // const tarRelPos = this.targetRelPos(grid, pokemon, target)
 
+    // console.log('tarRelPos =', tarRelPos)
+    // console.log('charge target =', target)
+    // console.log('previous direction =', direction)
+    
     // const dir = {
     //   up: 0,
     //   down: 0,
@@ -247,40 +341,53 @@ class BattleRoyale extends React.Component {
     let right = 0
     let left = 0
 
+    if (pokemon.attack <= pokemon.spAt){
+      if (tarRelPos[0] === 'left') {
+        left += 10
+        if (tarRelPos[2] > tarRelPos[3]){
+          left += 5
+        }
+      } else if (tarRelPos[0] === 'right') {
+        right += 10
+        if (tarRelPos[2] > tarRelPos[3]){
+          right += 5
+        }
+      } else if (tarRelPos[0] === 'same') {
+        right = 5,
+        left = 5
+      }
 
-    if (tarRelPos[0] === 'left') {
-      left += 1.1
-    } else if (tarRelPos[0] === 'right') {
-      right += 1.1
-    } else if (tarRelPos[0] === 'same') {
-      right = 0.6,
-      left = 0.6
+      if (tarRelPos[1] === 'above') {
+        up += 10
+        if (tarRelPos[2] < tarRelPos[3]){
+          up += 5
+        }
+      } else if (tarRelPos[1] === 'below') {
+        down += 10
+        if (tarRelPos[2] < tarRelPos[3]){
+          down += 5
+        }
+      } else if (tarRelPos[1] === 'same') {
+        up = 5,
+        down = 5
+      }
     }
-
-    if (tarRelPos[1] === 'above') {
-      up += 1.1
-    } else if (tarRelPos[1] === 'below') {
-      down += 1.1
-    } else if (tarRelPos[1] === 'same') {
-      up = 0.6,
-      down = 0.6
-    }
-
+  
     if (direction === 'up') {
-      up++,
-      left += 0.5
+      up += 0.5,
+      left += 0.5,
       right += 0.5
     } else if (direction === 'down') {
       down++,
-      left += 0.5
+      left += 0.5,
       right += 0.5
     } else if (direction === 'left') {
-      left++,
-      up += 0.5
+      left += 0.5,
+      up += 0.5,
       down += 0.5
     } else if (direction === 'right') {
-      right++,
-      up += 0.5
+      right += 0.5,
+      up += 0.5,
       down += 0.5
     }
     const ownArray = []
@@ -328,17 +435,18 @@ class BattleRoyale extends React.Component {
     }
     
 
-    console.log('coord values =', up, down, left, right)
-    console.log('direction sum =', directionSum, finalDir(), 'last dir =', direction)
+    // console.log('coord values =', up, down, left, right)
+    console.log(pokemon.name, 'direction sum =', directionSum, 'curr dir', finalDir(), 'last dir', direction, 'target:', target, this.state.deployed[target[0]].name)
 
-    this.makeMovement(_id, finalDir())
+    this.makeMovement(_id, finalDir(), target)
   }
 
-  makeMovement (_id, direction) {
+  makeMovement (_id, direction, target) {
     // let { pokeIndex, farIndex } = pokemon
     // const { _id } = pokemon
     // console.log(this.state.count)
     const { deployed } = this.state
+    // console.log('pre state direction =', this.state.deployed[_id].direction, direction)
     // let { pokeIndex, farIndex } = this.state.deployed[_id]
     // const pokemon = { ...this.state.deployed[_id] }
 
@@ -361,6 +469,8 @@ class BattleRoyale extends React.Component {
       deployed[_id].pokeIndex += width
       deployed[_id].farIndex += width
     }
+    deployed[_id].target = [...target]
+    deployed[_id].direction = direction
     // console.log('before state', name, _id, pokeIndex)
     grid[oldIndex].splice(grid[oldIndex].indexOf('pokeIndex'), 1)
     this.eraseBlock(oldIndex, oldFarIndex, 'pokemon', grid)
@@ -373,7 +483,8 @@ class BattleRoyale extends React.Component {
       deployed
     })
     // console.log('after state', name, _id, this.state.pokeIndex)
-    console.log(this.state)
+    // console.log(this.state)
+    // console.log('post state direction =', this.state.deployed[_id].direction)
   }
 
 
@@ -400,14 +511,20 @@ class BattleRoyale extends React.Component {
       xaxis = 'left'
     } else xaxis = 'same'
 
+    const xdistance = Math.abs(ownColumn - targetColumn)
+    const ydistance = Math.abs(ownRow - targetRow)
+
+    // const zdistanceUp = (ydistance * ydistance) + (xdistance * xdistance)
+
     // console.log('row + col', ownRow, ownColumn, targetRow, targetColumn)
     // console.log('x and y', xaxis, yaxis)
-    return [xaxis, yaxis]
+    return [xaxis, yaxis, xdistance, ydistance]
   }
 
   chooseTarget(grid, pokemon, target){
     const { pokeIndex, pokeHeight } = pokemon
     const { width } = this.state
+    const origTarget = [...target]
     // console.log('before grid limits')
     const limitsArray = this.findGridLimits(grid, pokeIndex, pokeHeight)
     // console.log('after grid limits')
@@ -419,17 +536,17 @@ class BattleRoyale extends React.Component {
     // console.log(pokemon.name, 'checked for close targets=', target)
     // console.log('checkprox after =', idArray)
 
-    if (target[0] === 'no id' || target[0] === 'id placeholder') {
+    if (target[0] === 'no id' || target[0] === 'id placeholder' || target[1] === origTarget[1]) {
       target = this.checkProximity(target, limitsArray, pokemon, 'near', 3)
       // console.log(pokemon.name, 'checked for medium targets=', target)
-    }
+    } 
 
-    if (target[0] === 'no id' || target[0] === 'id placeholder') {
+    if (target[0] === 'no id' || target[0] === 'id placeholder' || target[1] === origTarget[1]) {
       target = this.checkProximity(target, limitsArray, pokemon, 'medium', 5)
       // console.log(pokemon.name, 'checked for medium targets=', target)
     }
 
-    if (target[0] === 'no id' || target[0] === 'id placeholder') {
+    if (target[0] === 'no id' || target[0] === 'id placeholder' || target[1] === origTarget[1]) {
       target = this.checkProximity(target, limitsArray, pokemon, 'far', width)
       // console.log(pokemon.name, 'checked for far targets=', target)
     }
@@ -463,10 +580,16 @@ class BattleRoyale extends React.Component {
       })
       idArray = idArray.filter(item => item[0].startsWith('id_'))
       const originalTarget = idArray.filter(item => item[0] === target[0])
+      // console.log('originalTarget', originalTarget, 'target', target, 'idArray', idArray)
       if (originalTarget.length > 0) {
-        target = [...originalTarget[0], proximityName]
+        const randomTarget = Math.floor(Math.random() * originalTarget.length)
+        target = [...originalTarget[randomTarget], proximityName]
+        // console.log('original target chosen')
       } else if (idArray.length > 0) {
-        target = [...idArray[0], proximityName]
+        const randomTarget = Math.floor(Math.random() * idArray.length)
+        target = [...idArray[randomTarget], proximityName]
+        // console.log('random target chosen')
+        // target = [...idArray[0], proximityName]
       } else {
         target = ['no id', 'no index', 'no closeness']
       }
@@ -780,29 +903,384 @@ class BattleRoyale extends React.Component {
   // }
 
   effectiveness = {
-    fire: {
-      fire: 0.5,
-      grass: 2,
-      water: 0.5,
-      electric: 1
+    normal: {
+      normal: 1,
+      fire: 1,
+      water: 1,
+      electric: 1,
+      grass: 1,
+      ice: 1,
+      fighting: 1,
+      poison: 1,
+      ground: 1,
+      flying: 1,
+      psychic: 1,
+      bug: 1,
+      rock: 0.5,
+      ghost: 0,
+      dragon: 1,
+      dark: 1,
+      steel: 0.5,
+      fairy: 1,
+      null: 1
     },
-    grass: {
+    fire: {
+      normal: 1,
       fire: 0.5,
-      grass: 0.5,
-      water: 2,
-      electric: 1
+      water: 0.5,
+      electric: 1,
+      grass: 2,
+      ice: 2,
+      fighting: 1,
+      poison: 1,
+      ground: 1,
+      flying: 1,
+      psychic: 1,
+      bug: 2,
+      rock: 0.5,
+      ghost: 1,
+      dragon: 0.5,
+      dark: 1,
+      steel: 2,
+      fairy: 1,
+      null: 1
     },
     water: {
+      normal: 1,
       fire: 2,
-      grass: 0.5,
       water: 0.5,
-      electric: 0.5
+      electric: 1,
+      grass: 0.5,
+      ice: 1,
+      fighting: 1,
+      poison: 1,
+      ground: 2,
+      flying: 1,
+      psychic: 1,
+      bug: 2,
+      rock: 1,
+      ghost: 1,
+      dragon: 0.5,
+      dark: 1,
+      steel: 1,
+      fairy: 1,
+      null: 1
     },
     electric: {
+      normal: 1,
       fire: 1,
-      grass: 1,
       water: 2,
-      electric: 0.5
+      electric: 0.5,
+      grass: 0.5,
+      ice: 1,
+      fighting: 1,
+      poison: 1,
+      ground: 0,
+      flying: 2,
+      psychic: 1,
+      bug: 1,
+      rock: 1,
+      ghost: 1,
+      dragon: 0.5,
+      dark: 1,
+      steel: 1,
+      fairy: 1,
+      null: 1
+    },
+    grass: {
+      normal: 1,
+      fire: 0.5,
+      water: 2,
+      electric: 1,
+      grass: 0.5,
+      ice: 1,
+      fighting: 1,
+      poison: 0.5,
+      ground: 2,
+      flying: 0.5,
+      psychic: 1,
+      bug: 0.5,
+      rock: 2,
+      ghost: 1,
+      dragon: 0.5,
+      dark: 1,
+      steel: 0.5,
+      fairy: 1,
+      null: 1
+    },
+    //! I gave up from here onwards
+    ice: {
+      normal: 1,
+      fire: 1,
+      water: 1,
+      electric: 1,
+      grass: 1,
+      ice: 1,
+      fighting: 1,
+      poison: 1,
+      ground: 1,
+      flying: 1,
+      psychic: 1,
+      bug: 1,
+      rock: 1,
+      ghost: 1,
+      dragon: 1,
+      dark: 1,
+      steel: 1,
+      fairy: 1,
+      null: 1
+    },
+    fighting: {
+      normal: 1,
+      fire: 1,
+      water: 1,
+      electric: 1,
+      grass: 1,
+      ice: 1,
+      fighting: 1,
+      poison: 1,
+      ground: 1,
+      flying: 1,
+      psychic: 1,
+      bug: 1,
+      rock: 1,
+      ghost: 1,
+      dragon: 1,
+      dark: 1,
+      steel: 1,
+      fairy: 1,
+      null: 1
+    },
+    poison: {
+      normal: 1,
+      fire: 1,
+      water: 1,
+      electric: 1,
+      grass: 2,
+      ice: 1,
+      fighting: 1,
+      poison: 0.5,
+      ground: 0.5,
+      flying: 1,
+      psychic: 1,
+      bug: 1,
+      rock: 0.5,
+      ghost: 0.5,
+      dragon: 1,
+      dark: 1,
+      steel: 0,
+      fairy: 2,
+      null: 1
+    },
+    ground: {
+      normal: 1,
+      fire: 1,
+      water: 1,
+      electric: 1,
+      grass: 1,
+      ice: 1,
+      fighting: 1,
+      poison: 1,
+      ground: 1,
+      flying: 1,
+      psychic: 1,
+      bug: 1,
+      rock: 1,
+      ghost: 1,
+      dragon: 1,
+      dark: 1,
+      steel: 1,
+      fairy: 1,
+      null: 1
+    },
+    flying: {
+      normal: 1,
+      fire: 1,
+      water: 1,
+      electric: 0.5,
+      grass: 2,
+      ice: 1,
+      fighting: 2,
+      poison: 1,
+      ground: 1,
+      flying: 1,
+      psychic: 1,
+      bug: 2,
+      rock: 0.5,
+      ghost: 1,
+      dragon: 1,
+      dark: 1,
+      steel: 0.5,
+      fairy: 1,
+      null: 1
+    },
+    psychic: {
+      normal: 1,
+      fire: 1,
+      water: 1,
+      electric: 1,
+      grass: 1,
+      ice: 1,
+      fighting: 2,
+      poison: 2,
+      ground: 1,
+      flying: 1,
+      psychic: 0.5,
+      bug: 1,
+      rock: 1,
+      ghost: 1,
+      dragon: 1,
+      dark: 0,
+      steel: 0.5,
+      fairy: 1,
+      null: 1
+    },
+    bug: {
+      normal: 1,
+      fire: 1,
+      water: 1,
+      electric: 1,
+      grass: 1,
+      ice: 1,
+      fighting: 1,
+      poison: 1,
+      ground: 1,
+      flying: 1,
+      psychic: 1,
+      bug: 1,
+      rock: 1,
+      ghost: 1,
+      dragon: 1,
+      dark: 1,
+      steel: 1,
+      fairy: 1,
+      null: 1
+    },
+    rock: {
+      normal: 1,
+      fire: 1,
+      water: 1,
+      electric: 1,
+      grass: 1,
+      ice: 1,
+      fighting: 1,
+      poison: 1,
+      ground: 1,
+      flying: 1,
+      psychic: 1,
+      bug: 1,
+      rock: 1,
+      ghost: 1,
+      dragon: 1,
+      dark: 1,
+      steel: 1,
+      fairy: 1,
+      null: 1
+    },
+    ghost: {
+      normal: 1,
+      fire: 1,
+      water: 1,
+      electric: 1,
+      grass: 1,
+      ice: 1,
+      fighting: 1,
+      poison: 1,
+      ground: 1,
+      flying: 1,
+      psychic: 1,
+      bug: 1,
+      rock: 1,
+      ghost: 1,
+      dragon: 1,
+      dark: 1,
+      steel: 1,
+      fairy: 1,
+      null: 1
+    },
+    dragon: {
+      normal: 1,
+      fire: 1,
+      water: 1,
+      electric: 1,
+      grass: 1,
+      ice: 1,
+      fighting: 1,
+      poison: 1,
+      ground: 1,
+      flying: 1,
+      psychic: 1,
+      bug: 1,
+      rock: 1,
+      ghost: 1,
+      dragon: 1,
+      dark: 1,
+      steel: 1,
+      fairy: 1,
+      null: 1
+    },
+    dark: {
+      normal: 1,
+      fire: 1,
+      water: 1,
+      electric: 1,
+      grass: 1,
+      ice: 1,
+      fighting: 1,
+      poison: 1,
+      ground: 1,
+      flying: 1,
+      psychic: 1,
+      bug: 1,
+      rock: 1,
+      ghost: 1,
+      dragon: 1,
+      dark: 1,
+      steel: 1,
+      fairy: 1,
+      null: 1
+    },
+    steel: {
+      normal: 1,
+      fire: 1,
+      water: 1,
+      electric: 1,
+      grass: 1,
+      ice: 1,
+      fighting: 1,
+      poison: 1,
+      ground: 1,
+      flying: 1,
+      psychic: 1,
+      bug: 1,
+      rock: 1,
+      ghost: 1,
+      dragon: 1,
+      dark: 1,
+      steel: 1,
+      fairy: 1,
+      null: 1
+    },
+    fairy: {
+      normal: 1,
+      fire: 1,
+      water: 1,
+      electric: 1,
+      grass: 1,
+      ice: 1,
+      fighting: 1,
+      poison: 1,
+      ground: 1,
+      flying: 1,
+      psychic: 1,
+      bug: 1,
+      rock: 1,
+      ghost: 1,
+      dragon: 1,
+      dark: 1,
+      steel: 1,
+      fairy: 1,
+      null: 1
     }
   }
 

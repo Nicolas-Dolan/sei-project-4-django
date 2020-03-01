@@ -7,7 +7,7 @@ class SeedGenerator extends React.Component {
   }
   async componentDidMount() {
     let i = 1
-    for (i = 1; i <= 9; i++) {
+    for (i = 150; i <= 150; i++) {
       try {
         const res = await axios.get(`https://pokeapi.co/api/v2/pokemon/${i}/`)
         const res2 = await axios.get(`https://pokeapi.co/api/v2/pokemon-species/${i}/`)
