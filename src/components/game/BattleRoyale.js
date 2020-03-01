@@ -25,7 +25,7 @@ class BattleRoyale extends React.Component {
     
       { name: 'wartortle', id: '8', frontImg: './../assets/8/front.gif', backImg: './../assets/8/back.gif', hp: 59, attack: 63, defence: 80, spAt: 65, spDf: 80, speed: 58, type1: 'water', type2: 'null', shape: 'upright', height: 10, eggGroup: 'water1', isBaby: false, generation: 'generation-i', description: 'Its tail is large and covered with a rich, thick fur. The tail becomes increasingly deeper in color as Wartortle ages. The scratches on its shell are evidence of this Pokémon’s toughness as a battler.' },
     
-      { name: 'blastoise', id: '9', frontImg: './../assets/9/front.gif', backImg: './../assets/9/back.gif', hp: 79, attack: 83, defence: 100, spAt: 85, spDf: 105, speed: 78, type1: 'water', type2: 'null', shape: 'upright', height: 16, eggGroup: 'water1', isBaby: false, generation: 'generation-i', description: 'Blastoise has water spouts that protrude from its shell. The water spouts are very accurate. They can shoot bullets of water with enough accuracy to strike empty cans from a distance of over 160 feet.' }],
+      { name: 'blastoise', id: '9', frontImg: './../assets/9/front.gif', backImg: './../assets/9/back.gif', hp: 79, attack: 83, defence: 100, spAt: 85, spDf: 105, speed: 178, type1: 'water', type2: 'null', shape: 'upright', height: 16, eggGroup: 'water1', isBaby: false, generation: 'generation-i', description: 'Blastoise has water spouts that protrude from its shell. The water spouts are very accurate. They can shoot bullets of water with enough accuracy to strike empty cans from a distance of over 160 feet.' }],
     deployed: {},
     testmon: { name: 'venusaur', _id: '111', id: '3', frontImg: './../assets/4/front.gif', backImg: './../assets/4/back.gif', hp: 80, attack: 82, defence: 83, spAt: 100, spDf: 100, speed: 80, type1: 'poison', type2: 'grass', shape: 'quadruped', height: 6, description: ',There is a large flower on Venusaur’s back. The flower is said to take on vivid colors if it gets plenty of nutrition and sunlight. The flower’s aroma soothes the emotions of people.,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,' }
 
@@ -72,6 +72,7 @@ class BattleRoyale extends React.Component {
       staged,
       gridBuilt: true
     })
+    console.log(this.state)
   }
 
   deployPokemon(grid, deployed, staged) {
@@ -125,7 +126,10 @@ class BattleRoyale extends React.Component {
               this.paintBlock(possibleIndex, farIndex, 'pokemon', grid)
               this.paintBlock(possibleIndex, farIndex, deployed[pokemon]._id, grid)
               deployed[pokemon].pokeIndex = possibleIndex
-              deployed[pokemon].timerIdArray = []
+              deployed[pokemon].farIndex = farIndex
+              deployed[pokemon].target = ['id placeholder', 'index placeholder', 'closeness placeholder']
+              deployed[pokemon].pokeTimerId = 'placeholder'
+              deployed[pokemon].direction = this.randomDirection()
               success = true
             }
           }
@@ -143,6 +147,11 @@ class BattleRoyale extends React.Component {
     // it will also need to determine the correct size of the pokemon
   }
 
+  randomDirection(){
+    const dirs = ['up', 'down', 'left', 'right']
+    return dirs[Math.floor(Math.random() * 4)]
+  }
+
   activatePokemon = () => {
     const { gridBuilt, grid, deployed } = this.state
     this.setState({
@@ -151,18 +160,28 @@ class BattleRoyale extends React.Component {
     
     Object.keys(deployed).map(_id => {
       const pokemon = deployed[_id]
-      const { pokeTimerId } = pokemon
+      const { pokeIndex, farIndex } = this.state.deployed[_id]
+      const { pokeTimerId } = _id
+      // deployed[pokemon].pokeTimerId = pokeTimerId
       // console.log(pokemon.name, 'is active')
-      this.chooseDirection(grid, pokemon)
+      // this.pokeAction(grid, pokemon)
       //! below is the timer array function, I will move all of the above functions under setInterval once I'm confident they all work
-      // if (gridBuilt) {
-      //   this.pokeTimer = setInterval(() => {
-      //     console.log(pokemon.name, 'is active')
-      //     this.setState({
-      //       pokeTimerId
-      //     })
-      //   }, 3000)  
-      // }
+      if (gridBuilt) {
+        this.pokeTimer = setInterval(() => {
+          // console.log(pokemon.name, 'is active')
+          // console.log('function', this.returnPlayerIndex())
+          // console.log('state', this.state.playerIndex)
+          // this.handleSetState(_id)
+          this.pokeAction(grid, pokemon)
+          // this.makeMovement(_id, 'down')
+          // this.setState({
+          //   // pokeTimerId,
+          //   pokeIndex,
+          //   farIndex,
+          //   grid
+          // })
+        }, pokemon.pokeSpeed)  
+      }
     })
     ///////////////////////////
 
@@ -186,49 +205,275 @@ class BattleRoyale extends React.Component {
     //   }, 1000)  
     // }
   }
+  
+  handleSetState(_id) {
+    const { deployed } = this.state
+    deployed[_id].pokeIndex++
+    this.setState({ deployed })
+    console.log(this.state.deployed[_id].pokeIndex)
+  }
+  
+  
 
-  chooseDirection(grid, pokemon) {
-    // console.log(pokemon.name, 'chose direction')
-    this.chooseTarget(grid, pokemon)
+  pokeAction(grid, pokemon) {
+    let { target } = pokemon
+    console.log(pokemon.name)
+    target = this.chooseTarget(grid, pokemon, target)
+    console.log('top level target =', target)
+    this.movePokemon(grid, pokemon, target)
   }
 
-  chooseTarget(grid, pokemon){
-    this.findTargets(grid, pokemon)
+  movePokemon(grid, pokemon, target){
+    if (pokemon.attack <= pokemon.spAt){
+      this.charge(grid, pokemon, target)
+    }
   }
 
-  findTargets(grid, pokemon){
-    const { pokeIndex, pokeHeight, _id, name } = pokemon
+  charge(grid, pokemon, target){
+    const { width } = this.state
+    const { pokeIndex, pokeHeight, _id, direction } = pokemon
+    const tarRelPos = this.targetRelPos(grid, pokemon, target)
+    console.log('tarRelPos =', tarRelPos)
+
+    // const dir = {
+    //   up: 0,
+    //   down: 0,
+    //   right: 0,
+    //   left: 0
+    // }
+
+    let up = 0
+    let down = 0
+    let right = 0
+    let left = 0
+
+
+    if (tarRelPos[0] === 'left') {
+      left += 1.1
+    } else if (tarRelPos[0] === 'right') {
+      right += 1.1
+    } else if (tarRelPos[0] === 'same') {
+      right = 0.6,
+      left = 0.6
+    }
+
+    if (tarRelPos[1] === 'above') {
+      up += 1.1
+    } else if (tarRelPos[1] === 'below') {
+      down += 1.1
+    } else if (tarRelPos[1] === 'same') {
+      up = 0.6,
+      down = 0.6
+    }
+
+    if (direction === 'up') {
+      up++,
+      left += 0.5
+      right += 0.5
+    } else if (direction === 'down') {
+      down++,
+      left += 0.5
+      right += 0.5
+    } else if (direction === 'left') {
+      left++,
+      up += 0.5
+      down += 0.5
+    } else if (direction === 'right') {
+      right++,
+      up += 0.5
+      down += 0.5
+    }
+    const ownArray = []
+    const leftArray = []
+    const rightArray = []
+    const topArray = []
+    const bottomArray = []
+    this.findSelf(pokeIndex, pokeHeight, ownArray, leftArray, rightArray, topArray, bottomArray)
+
+    if (!((pokeIndex + pokeHeight - 1) % width < width - 1
+          && this.checkMove(grid, rightArray, 'wall', _id)
+          && this.checkMove(grid, rightArray, 'pokemon', _id))
+    ) {
+      right = 'stop'
+    }
+    if (!(pokeIndex % width > 0
+          && this.checkMove(grid, leftArray, 'wall', _id)
+          && this.checkMove(grid, leftArray, 'pokemon', _id))) {
+      left = 'stop'
+    }
+    if (!((pokeIndex + (width * (pokeHeight - 1))) + width < width * width
+          && this.checkMove(grid, bottomArray, 'wall', _id)
+          && this.checkMove(grid, bottomArray, 'pokemon', _id))) {
+      down = 'stop'
+    }
+    if (!(pokeIndex - width >= 0
+          && this.checkMove(grid, topArray, 'wall', _id)
+          && this.checkMove(grid, topArray, 'pokemon', _id))) {
+      up = 'stop'
+    }
+
+    const directionSum = [up, down, left, right].sort().reverse().filter(dir => dir !== 'stop')
+    const finalDir = () => {
+      if (directionSum.length < 1){
+        return 'stop'
+      } else if (directionSum[0] === up) {
+        return 'up'
+      } else if (directionSum[0] === down) {
+        return 'down'
+      } else if (directionSum[0] === left) {
+        return 'left'
+      } else if (directionSum[0] === right) {
+        return 'right'
+      } else return 'stop'
+    }
+    
+
+    console.log('coord values =', up, down, left, right)
+    console.log('direction sum =', directionSum, finalDir(), 'last dir =', direction)
+
+    this.makeMovement(_id, finalDir())
+  }
+
+  makeMovement (_id, direction) {
+    // let { pokeIndex, farIndex } = pokemon
+    // const { _id } = pokemon
+    // console.log(this.state.count)
+    const { deployed } = this.state
+    // let { pokeIndex, farIndex } = this.state.deployed[_id]
+    // const pokemon = { ...this.state.deployed[_id] }
+
+    // let obj[pokeIndex] =
+   
+    const { width, grid } = this.state
+    // console.log('before change', name, _id, pokeIndex)
+    const oldIndex = deployed[_id].pokeIndex
+    const oldFarIndex = deployed[_id].farIndex
+    if (direction === 'right') {
+      deployed[_id].pokeIndex++
+      deployed[_id].farIndex++
+    } else if (direction === 'left') {
+      deployed[_id].pokeIndex--
+      deployed[_id].farIndex--
+    } else if (direction === 'up') {
+      deployed[_id].pokeIndex -= width
+      deployed[_id].farIndex -= width
+    } else if (direction === 'down') {
+      deployed[_id].pokeIndex += width
+      deployed[_id].farIndex += width
+    }
+    // console.log('before state', name, _id, pokeIndex)
+    grid[oldIndex].splice(grid[oldIndex].indexOf('pokeIndex'), 1)
+    this.eraseBlock(oldIndex, oldFarIndex, 'pokemon', grid)
+    this.eraseBlock(oldIndex, oldFarIndex, _id, grid)
+    grid[deployed[_id].pokeIndex].push('pokeIndex')
+    this.paintBlock(deployed[_id].pokeIndex, deployed[_id].farIndex, 'pokemon', grid)
+    this.paintBlock(deployed[_id].pokeIndex, deployed[_id].farIndex, _id, grid)
+    this.setState({
+      grid,
+      deployed
+    })
+    // console.log('after state', name, _id, this.state.pokeIndex)
+    console.log(this.state)
+  }
+
+
+  targetRelPos(grid, pokemon, target){
+    const { width } = this.state
+    const { pokeIndex } = pokemon
+    const targetIndex = target[1]
+    const ownRow = Math.ceil((pokeIndex + 1) / width)
+    const ownColumn = width - (((width * width) - (pokeIndex + 1)) % width)
+    const targetRow = Math.ceil((targetIndex + 1) / width)
+    const targetColumn = width - (((width * width) - (targetIndex + 1)) % width)
+
+    let xaxis = ''
+    let yaxis = ''
+    if (ownRow < targetRow) {
+      yaxis = 'below'
+    } else if ( ownRow > targetRow) {
+      yaxis = 'above'
+    } else yaxis = 'same'
+
+    if (ownColumn < targetColumn) {
+      xaxis = 'right'
+    } else if ( ownColumn > targetColumn) {
+      xaxis = 'left'
+    } else xaxis = 'same'
+
+    // console.log('row + col', ownRow, ownColumn, targetRow, targetColumn)
+    // console.log('x and y', xaxis, yaxis)
+    return [xaxis, yaxis]
+  }
+
+  chooseTarget(grid, pokemon, target){
+    const { pokeIndex, pokeHeight } = pokemon
     const { width } = this.state
     // console.log('before grid limits')
     const limitsArray = this.findGridLimits(grid, pokeIndex, pokeHeight)
     // console.log('after grid limits')
     // console.log('limitsarray', pokemon.name, limitsArray)
-    const farIndex = pokeIndex + ((pokeHeight - 1) + ((pokeHeight - 1) * width))
 
-    const closeProximity = []
-    let idArray = []
+
+    // console.log('choosetargets before =', target)
+    target = this.checkProximity(target, limitsArray, pokemon, 'close', 1)
+    // console.log(pokemon.name, 'checked for close targets=', target)
+    // console.log('checkprox after =', idArray)
+
+    if (target[0] === 'no id' || target[0] === 'id placeholder') {
+      target = this.checkProximity(target, limitsArray, pokemon, 'near', 3)
+      // console.log(pokemon.name, 'checked for medium targets=', target)
+    }
+
+    if (target[0] === 'no id' || target[0] === 'id placeholder') {
+      target = this.checkProximity(target, limitsArray, pokemon, 'medium', 5)
+      // console.log(pokemon.name, 'checked for medium targets=', target)
+    }
+
+    if (target[0] === 'no id' || target[0] === 'id placeholder') {
+      target = this.checkProximity(target, limitsArray, pokemon, 'far', width)
+      // console.log(pokemon.name, 'checked for far targets=', target)
+    }
+    return target
+  }
+
+  checkProximity(target, limitsArray, pokemon, proximityName, proximityDistance){
     // console.log('before proximityFinder')
-    this.proximityFinder(2, limitsArray, pokeIndex, farIndex, width, closeProximity)
+    const { pokeIndex, _id, pokeHeight, name } = pokemon
+    const { grid, width } = this.state
+    const farIndex = pokeIndex + ((pokeHeight - 1) + ((pokeHeight - 1) * width))
+    let idArray = []
+    const closeProximity = []
+    this.proximityFinder(proximityDistance, limitsArray, pokeIndex, farIndex, width, closeProximity)
     // console.log('after proximityFinder')
     // console.log(pokemon.name, closeProximity)
 
     if (!this.checkMove(grid, closeProximity, 'pokemon', _id)){
 
-      console.log(name, 'has other pokemon near')
+      // console.log(name, 'has other pokemon near')
 
       idArray = closeProximity.map((item) => {
         if (grid[item].includes('pokemon') && !grid[item].includes(_id)) {
           return grid[item].reduce((acc2, string) => {
             if (string.startsWith('id_')){
-              acc2 = string
+              acc2 = [string, item]
             }
             return acc2
           })
         } return 'none'
       })
-      idArray = idArray.filter(item => item.startsWith('id_'))
+      idArray = idArray.filter(item => item[0].startsWith('id_'))
+      const originalTarget = idArray.filter(item => item[0] === target[0])
+      if (originalTarget.length > 0) {
+        target = [...originalTarget[0], proximityName]
+      } else if (idArray.length > 0) {
+        target = [...idArray[0], proximityName]
+      } else {
+        target = ['no id', 'no index', 'no closeness']
+      }
+      // console.log('original targets?', originalTarget)
     }
-    console.log('after idArray function', idArray)
+    // console.log('after idArray function', idArray)
+    return target
   }
   
   
