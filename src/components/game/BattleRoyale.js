@@ -35,6 +35,7 @@ class BattleRoyale extends React.Component {
 
     // gameActive: false
   }
+  //! django version
   async componentDidMount() {
     console.log('component did mount')
   } catch(err) {
