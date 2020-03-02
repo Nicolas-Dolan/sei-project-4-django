@@ -1,0 +1,10 @@
+[
+  {
+    "model": "jwt_auth.user",
+  "pk": 1,
+  "fields": {
+    "password": "pass",
+    "username": "admin1"
+  }
+  }
+]

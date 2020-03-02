@@ -1,0 +1,52 @@
+[
+{ 
+  "model": "pokemons.pokemon",
+  "pk": 1,
+  "fields": {
+    "name": "bulbasaur", 
+  "dexNum": 1, 
+  "frontImg": "./../assets/1/front.gif", 
+  "backImg": "./../assets/1/back.gif", 
+  "hp": 45, 
+  "attack": 49, 
+  "defence": 49, 
+  "spAt": 65, 
+  "spDf": 65, 
+  "speed": 45, 
+  "type1": "poison", 
+  "type2": "grass", 
+  "shape": "quadruped", 
+  "height": 7, 
+  "eggGroup": "plant", 
+  "isBaby": false, 
+  "generation": "generation-i", 
+  "description": "Bulbasaur can be seen napping in bright sunlight.",
+  "owner": 1
+}
+},
+{ 
+  "model": "pokemons.pokemon",
+  "pk": 2,
+  "fields": {
+  "name": "ivysaur", 
+  "dexNum": 2, 
+  "frontImg": "./../assets/2/front.gif", 
+  "backImg": "./../assets/2/back.gif", 
+  "hp": 60, 
+  "attack": 62, 
+  "defence": 63, 
+  "spAt": 80, 
+  "spDf": 80, 
+  "speed": 60, 
+  "type1": "poison", 
+  "type2": "grass", 
+  "shape": "quadruped", 
+  "height": 10, 
+  "eggGroup": "plant", 
+  "isBaby": false, 
+  "generation": "generation-i", 
+  "description": "There is a bud on this Pokémon’s back. To support its weight, Ivysaur’s legs and trunk grow thick and strong.", 
+  "owner": 1
+  }
+}
+]
