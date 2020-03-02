@@ -59,7 +59,7 @@ div.player {
 }
 
 div.pokeIndex {
-  // background-color: red;
+  background-color: red;
   padding: 0;
 }
 
@@ -77,4 +77,24 @@ div.pokeIndex {
   margin: 0;
   vertical-align: top;
   // clip: rect(40px,60px,200px,0px);
+}
+
+div.fire {
+  background-color: red;
+}
+
+div.water {
+  background-color: blue;
+}
+
+div.grass {
+  background-color: green;
+}
+
+div.poison {
+  background-color: purple;
+}
+
+div.flying {
+  background-color: grey;
 }

@@ -13,23 +13,24 @@ class BattleRoyale extends React.Component {
 
       { name: 'ivysaur', id: '2', frontImg: './../assets/2/front.gif', backImg: './../assets/2/back.gif', hp: 60, attack: 62, defence: 63, spAt: 80, spDf: 80, speed: 60, type1: 'poison', type2: 'grass', shape: 'quadruped', height: 10, eggGroup: 'plant', isBaby: false, generation: 'generation-i', description: 'There is a bud on this Pokémon’s back. To support its weight, Ivysaur’s legs and trunk grow thick and strong. If it starts spending more time lying in the sunlight, it’s a sign that the bud will bloom into a large flower soon.' },
     
-      { name: 'venusaur', id: '3', frontImg: './../assets/3/front.gif', backImg: './../assets/3/back.gif', hp: 80, attack: 82, defence: 83, spAt: 100, spDf: 100, speed: 80, type1: 'poison', type2: 'grass', shape: 'quadruped', height: 20, eggGroup: 'plant', isBaby: false, generation: 'generation-i', description: 'There is a large flower on Venusaur’s back. The flower is said to take on vivid colors if it gets plenty of nutrition and sunlight. The flower’s aroma soothes the emotions of people.' },
+      // { name: 'venusaur', id: '3', frontImg: './../assets/3/front.gif', backImg: './../assets/3/back.gif', hp: 80, attack: 82, defence: 83, spAt: 100, spDf: 100, speed: 80, type1: 'poison', type2: 'grass', shape: 'quadruped', height: 20, eggGroup: 'plant', isBaby: false, generation: 'generation-i', description: 'There is a large flower on Venusaur’s back. The flower is said to take on vivid colors if it gets plenty of nutrition and sunlight. The flower’s aroma soothes the emotions of people.' },
     
-      { name: 'charmander', id: '4', frontImg: './../assets/4/front.gif', backImg: './../assets/4/back.gif', hp: 39, attack: 52, defence: 43, spAt: 60, spDf: 50, speed: 65, type1: 'fire', type2: 'null', shape: 'upright', height: 6, eggGroup: 'dragon', isBaby: false, generation: 'generation-i', description: 'The flame that burns at the tip of its tail is an indication of its emotions. The flame wavers when Charmander is enjoying itself. If the Pokémon becomes enraged, the flame burns fiercely.' },
+      // { name: 'charmander', id: '4', frontImg: './../assets/4/front.gif', backImg: './../assets/4/back.gif', hp: 39, attack: 52, defence: 43, spAt: 60, spDf: 50, speed: 65, type1: 'fire', type2: 'null', shape: 'upright', height: 6, eggGroup: 'dragon', isBaby: false, generation: 'generation-i', description: 'The flame that burns at the tip of its tail is an indication of its emotions. The flame wavers when Charmander is enjoying itself. If the Pokémon becomes enraged, the flame burns fiercely.' },
     
-      { name: 'charmeleon', id: '5', frontImg: './../assets/5/front.gif', backImg: './../assets/5/back.gif', hp: 58, attack: 64, defence: 58, spAt: 80, spDf: 65, speed: 80, type1: 'fire', type2: 'null', shape: 'upright', height: 11, eggGroup: 'dragon', isBaby: false, generation: 'generation-i', description: 'Charmeleon mercilessly destroys its foes using its sharp claws. If it encounters a strong foe, it turns aggressive. In this excited state, the flame at the tip of its tail flares with a bluish white color.' },
+      // { name: 'charmeleon', id: '5', frontImg: './../assets/5/front.gif', backImg: './../assets/5/back.gif', hp: 58, attack: 64, defence: 58, spAt: 80, spDf: 65, speed: 80, type1: 'fire', type2: 'null', shape: 'upright', height: 11, eggGroup: 'dragon', isBaby: false, generation: 'generation-i', description: 'Charmeleon mercilessly destroys its foes using its sharp claws. If it encounters a strong foe, it turns aggressive. In this excited state, the flame at the tip of its tail flares with a bluish white color.' },
     
-      { name: 'charizard', id: '6', frontImg: './../assets/6/front.gif', backImg: './../assets/6/back.gif', hp: 78, attack: 84, defence: 78, spAt: 109, spDf: 85, speed: 100, type1: 'flying', type2: 'fire', shape: 'upright', height: 17, eggGroup: 'dragon', isBaby: false, generation: 'generation-i', description: 'Charizard flies around the sky in search of powerful opponents. It breathes fire of such great heat that it melts anything. However, it never turns its fiery breath on any opponent weaker than itself.' },
+      // { name: 'charizard', id: '6', frontImg: './../assets/6/front.gif', backImg: './../assets/6/back.gif', hp: 78, attack: 84, defence: 78, spAt: 109, spDf: 85, speed: 100, type1: 'flying', type2: 'fire', shape: 'upright', height: 17, eggGroup: 'dragon', isBaby: false, generation: 'generation-i', description: 'Charizard flies around the sky in search of powerful opponents. It breathes fire of such great heat that it melts anything. However, it never turns its fiery breath on any opponent weaker than itself.' },
     
-      { name: 'squirtle', id: '7', frontImg: './../assets/7/front.gif', backImg: './../assets/7/back.gif', hp: 44, attack: 48, defence: 65, spAt: 50, spDf: 64, speed: 43, type1: 'water', type2: 'null', shape: 'upright', height: 5, eggGroup: 'water1', isBaby: false, generation: 'generation-i', description: 'Squirtle’s shell is not merely used for protection. The shell’s rounded shape and the grooves on its surface help minimize resistance in water, enabling this Pokémon to swim at high speeds.' },
+      // { name: 'squirtle', id: '7', frontImg: './../assets/7/front.gif', backImg: './../assets/7/back.gif', hp: 44, attack: 48, defence: 65, spAt: 50, spDf: 64, speed: 43, type1: 'water', type2: 'null', shape: 'upright', height: 5, eggGroup: 'water1', isBaby: false, generation: 'generation-i', description: 'Squirtle’s shell is not merely used for protection. The shell’s rounded shape and the grooves on its surface help minimize resistance in water, enabling this Pokémon to swim at high speeds.' },
     
-      { name: 'wartortle', id: '8', frontImg: './../assets/8/front.gif', backImg: './../assets/8/back.gif', hp: 59, attack: 63, defence: 80, spAt: 65, spDf: 80, speed: 58, type1: 'water', type2: 'null', shape: 'upright', height: 10, eggGroup: 'water1', isBaby: false, generation: 'generation-i', description: 'Its tail is large and covered with a rich, thick fur. The tail becomes increasingly deeper in color as Wartortle ages. The scratches on its shell are evidence of this Pokémon’s toughness as a battler.' },
+      // { name: 'wartortle', id: '8', frontImg: './../assets/8/front.gif', backImg: './../assets/8/back.gif', hp: 59, attack: 63, defence: 80, spAt: 65, spDf: 80, speed: 58, type1: 'water', type2: 'null', shape: 'upright', height: 10, eggGroup: 'water1', isBaby: false, generation: 'generation-i', description: 'Its tail is large and covered with a rich, thick fur. The tail becomes increasingly deeper in color as Wartortle ages. The scratches on its shell are evidence of this Pokémon’s toughness as a battler.' },
 
       // { name: 'mewtwo', id: '150', frontImg: './../assets/150/front.gif', backImg: './../assets/150/back.gif', hp: 106, attack: 110, defence: 90, spAt: 154, spDf: 90, speed: 130, type1: 'psychic', type2: 'null', shape: 'upright', height: 20, eggGroup: 'no-eggs', isBaby: false, generation: 'generation-i', description: 'Mewtwo is a Pokémon that was created by genetic manipulation. However, even though the scientific power of humans created this Pokémon’s body, they failed to endow Mewtwo with a compassionate heart.' },
     
       { name: 'blastoise', id: '9', frontImg: './../assets/9/front.gif', backImg: './../assets/9/back.gif', hp: 79, attack: 83, defence: 100, spAt: 85, spDf: 105, speed: 178, type1: 'water', type2: 'null', shape: 'upright', height: 16, eggGroup: 'water1', isBaby: false, generation: 'generation-i', description: 'Blastoise has water spouts that protrude from its shell. The water spouts are very accurate. They can shoot bullets of water with enough accuracy to strike empty cans from a distance of over 160 feet.' }],
     deployed: {},
     benched: {},
+    attacks: {},
     testmon: { name: 'venusaur', _id: '111', id: '3', frontImg: './../assets/4/front.gif', backImg: './../assets/4/back.gif', hp: 80, attack: 82, defence: 83, spAt: 100, spDf: 100, speed: 80, type1: 'poison', type2: 'grass', shape: 'quadruped', height: 6, description: ',There is a large flower on Venusaur’s back. The flower is said to take on vivid colors if it gets plenty of nutrition and sunlight. The flower’s aroma soothes the emotions of people.,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,' }
 
     // gameActive: false
@@ -193,8 +194,8 @@ class BattleRoyale extends React.Component {
           //   farIndex,
           //   grid
           // })
-        }, pokemon.pokeSpeed)  
-        // }, 2000) 
+        // }, pokemon.pokeSpeed)  
+        }, 2000) 
         deployed[_id].pokeTimer = this.pokeTimer
         this.setState({
           deployed
@@ -281,11 +282,14 @@ class BattleRoyale extends React.Component {
 
   attackPokemon(pokemon, target, tarRelPos){
     let { attackCounter } = pokemon
-    const { attack, type1, type2, _id } = pokemon
-    const { deployed } = this.state
+    let { attacks } = this.state
+    const { attack, type1, type2, _id, spAt, pokeIndex, pokeHeight } = pokemon
+    const { deployed, width, grid } = this.state
     const { defence } = deployed[target[0]]
     const defTyp1 = deployed[target[0]].type1
     const defTyp2 = deployed[target[0]].type2
+    const attOrigin = pokeIndex + (Math.round(pokeHeight / 2) - 1) + ((Math.round(pokeHeight / 2) - 1) * width)
+    console.log('attacks', attacks)
     
     attackCounter++
     deployed[_id].attackCounter = attackCounter
@@ -306,8 +310,22 @@ class BattleRoyale extends React.Component {
       deployed[target[0]].damageReceived = attType
       deployed[_id].attackCounter = 0
       console.log(pokemon.name, 'did', this.damageCalculator(attack, defence, attType, defTyp1, defTyp2), 'physical', attType, 'damage against', deployed[target[0]].name, tarRelPos[0], tarRelPos[1])
+    // }
+    } else if (attackCounter > 3) {
+      const attId = 'attId_' + Math.floor(Math.random() * 100000000)
+      attacks = { ...attacks, [attId]: { 'attType': attType, 'attId': attId, 'ownerId': _id, 'targetIndex': target[1], 'power': spAt, 'attIndex': attOrigin } }
+      // attacks[attId].attType = attType
+      // attacks[attId].attId = attId
+      // attacks[attId].ownerId = _id
+      // attacks[attId].targetIndex = target[1]
+      // attacks[attId].power = spAt
+      // attacks[attId].attIndex = attOrigin
+      grid[attOrigin].push('attack')
+      grid[attOrigin].push(attId)
+      grid[attOrigin].push(attType)
+      deployed[_id].attackCounter = 0
     }
-    this.setState({ deployed })
+    this.setState({ deployed, attacks, grid })
   }
 
   damageCalculator(attack, defence, attType, defTyp1, defTyp2){
