@@ -4,7 +4,8 @@
   "pk": 1,
   "fields": {
     "password": "pass",
-    "username": "admin1"
+    "username": "admin",
+    "email": "admin@email.com"
   }
   }
 ]
