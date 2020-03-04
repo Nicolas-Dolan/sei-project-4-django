@@ -10,14 +10,16 @@ class BattleRoyale extends React.Component {
     count: 0,
     game: 'test',
     gridBuilt: false,
+    pokemonDeployed: false,
     gameActive: false,
     width: 30,
     squareHeight: 14.4,
     grid: [],
     playerIndex: 53,
-    staged: [{ name: 'bulbasaur', id: '1', frontImg: 'http://www.pokestadium.com/sprites/black-white/animated/bulbasaur.gif', backImg: 'http://www.pokestadium.com/sprites/black-white/animated/back/bulbasaur.gif', hp: 45, attack: 49, defence: 49, spAt: 65, spDf: 65, speed: 45, type1: 'poison', type2: 'grass', shape: 'quadruped', height: 7, eggGroup: 'plant', isBaby: false, generation: 'generation-i', description: 'Bulbasaur can be seen napping in bright sunlight. There is a seed on its back. By soaking up the sun’s rays, the seed grows progressively larger.' },
+    staged: {},
+      // { name: 'bulbasaur', id: '1', frontImg: 'http://www.pokestadium.com/sprites/black-white/animated/bulbasaur.gif', backImg: 'http://www.pokestadium.com/sprites/black-white/animated/back/bulbasaur.gif', hp: 45, attack: 49, defence: 49, spAt: 65, spDf: 65, speed: 45, type1: 'poison', type2: 'grass', shape: 'quadruped', height: 7, eggGroup: 'plant', isBaby: false, generation: 'generation-i', description: 'Bulbasaur can be seen napping in bright sunlight. There is a seed on its back. By soaking up the sun’s rays, the seed grows progressively larger.' },
 
-      { name: 'ivysaur', id: '2', frontImg: './../assets/2/front.gif', backImg: './../assets/2/back.gif', hp: 60, attack: 62, defence: 63, spAt: 80, spDf: 80, speed: 60, type1: 'poison', type2: 'grass', shape: 'quadruped', height: 10, eggGroup: 'plant', isBaby: false, generation: 'generation-i', description: 'There is a bud on this Pokémon’s back. To support its weight, Ivysaur’s legs and trunk grow thick and strong. If it starts spending more time lying in the sunlight, it’s a sign that the bud will bloom into a large flower soon.' },
+      // { name: 'ivysaur', id: '2', frontImg: './../assets/2/front.gif', backImg: './../assets/2/back.gif', hp: 60, attack: 62, defence: 63, spAt: 80, spDf: 80, speed: 60, type1: 'poison', type2: 'grass', shape: 'quadruped', height: 10, eggGroup: 'plant', isBaby: false, generation: 'generation-i', description: 'There is a bud on this Pokémon’s back. To support its weight, Ivysaur’s legs and trunk grow thick and strong. If it starts spending more time lying in the sunlight, it’s a sign that the bud will bloom into a large flower soon.' },
     
       // { name: 'venusaur', id: '3', frontImg: './../assets/3/front.gif', backImg: './../assets/3/back.gif', hp: 80, attack: 82, defence: 83, spAt: 100, spDf: 100, speed: 80, type1: 'poison', type2: 'grass', shape: 'quadruped', height: 20, eggGroup: 'plant', isBaby: false, generation: 'generation-i', description: 'There is a large flower on Venusaur’s back. The flower is said to take on vivid colors if it gets plenty of nutrition and sunlight. The flower’s aroma soothes the emotions of people.' },
     
@@ -33,7 +35,8 @@ class BattleRoyale extends React.Component {
 
       // { name: 'mewtwo', id: '150', frontImg: './../assets/150/front.gif', backImg: './../assets/150/back.gif', hp: 106, attack: 110, defence: 90, spAt: 154, spDf: 90, speed: 130, type1: 'psychic', type2: 'null', shape: 'upright', height: 20, eggGroup: 'no-eggs', isBaby: false, generation: 'generation-i', description: 'Mewtwo is a Pokémon that was created by genetic manipulation. However, even though the scientific power of humans created this Pokémon’s body, they failed to endow Mewtwo with a compassionate heart.' },
     
-      { name: 'blastoise', id: '9', frontImg: 'http://www.pokestadium.com/sprites/black-white/animated/blastoise.gif', backImg: './../assets/9/back.gif', hp: 79, attack: 83, defence: 100, spAt: 85, spDf: 105, speed: 178, type1: 'water', type2: 'null', shape: 'upright', height: 16, eggGroup: 'water1', isBaby: false, generation: 'generation-i', description: 'Blastoise has water spouts that protrude from its shell. The water spouts are very accurate. They can shoot bullets of water with enough accuracy to strike empty cans from a distance of over 160 feet.' }],
+      // { name: 'blastoise', id: '9', frontImg: 'http://www.pokestadium.com/sprites/black-white/animated/blastoise.gif', backImg: './../assets/9/back.gif', hp: 79, attack: 83, defence: 100, spAt: 85, spDf: 105, speed: 178, type1: 'water', type2: 'null', shape: 'upright', height: 16, eggGroup: 'water1', isBaby: false, generation: 'generation-i', description: 'Blastoise has water spouts that protrude from its shell. The water spouts are very accurate. They can shoot bullets of water with enough accuracy to strike empty cans from a distance of over 160 feet.' }
+    
     deployed: {},
     benched: {},
     attacks: {},
@@ -46,6 +49,19 @@ class BattleRoyale extends React.Component {
     try {
       const res = await axios.get('api/pokemons/')
       console.log('res =', res.data)
+      const { grid, width } = this.state
+    let i = 0
+    for (i = 0; i < (width * width); i++) {
+      // grid.push(['grid-item'])
+      grid.push([])
+    }
+    // this.deployPokemon(grid, deployed, staged, benched)
+    // console.log('deployed in buildgame =', deployed)
+    // this.movePokemon(grid, deployed)
+    this.setState({
+      grid,
+      gridBuilt: true
+    })
       this.setState({ allPokemon: res.data })
     } catch (err) {
       console.log(err)
@@ -80,7 +96,7 @@ class BattleRoyale extends React.Component {
       // grid.push(['grid-item'])
       grid.push([])
     }
-    this.deployPokemon(grid, deployed, staged, benched)
+    // this.deployPokemon(grid, deployed, staged, benched)
     console.log('deployed in buildgame =', deployed)
     // this.movePokemon(grid, deployed)
     this.setState({
@@ -92,12 +108,12 @@ class BattleRoyale extends React.Component {
     // console.log(this.state)
   }
 
-  deployPokemon(grid, deployed, staged, benched) {
-    this.placePlayer(grid)
-    this.portPokemon(staged, deployed)
-    this.placePokemon(grid, deployed, benched)
-    staged = []
-  }
+  // deployPokemon(grid, deployed, staged, benched) {
+  //   // this.placePlayer(grid)
+  //   // this.portPokemon(staged, deployed)
+  //   this.placePokemon(grid, deployed, benched, staged)
+  //   staged = {}
+  // }
 
   placePlayer(grid) {
     const { playerIndex, width } = this.state
@@ -110,18 +126,29 @@ class BattleRoyale extends React.Component {
   }
 
   portPokemon(staged, deployed){
-    staged.map(item => {
-      const _id = 'id_' + Math.floor(Math.random() * 100000000)
-      deployed[_id] = item
-      deployed[_id]._id = _id
-      deployed[_id].pokeHeight = this.pokeHeight(deployed[_id].height)
-      deployed[_id].pokeSpeed = this.pokeSpeed(deployed[_id].speed)
+    console.log('staged in port =', staged)
+    Object.keys(staged).map(key => {
+      const _id = key
+      deployed[_id] = {...key}
+      // deployed[_id]._id = _id
+      // deployed[_id].pokeHeight = this.pokeHeight(deployed[_id].height)
+      // deployed[_id].pokeSpeed = this.pokeSpeed(deployed[_id].speed)
     })
+    console.log('deployed', deployed)
   }
 
-  placePokemon(grid, deployed, benched){
+  deployPokemon = () => {
+    const { deployed, staged, benched, grid, width } = this.state
+    Object.keys(staged).map(key => {
+
+      deployed[key] = {...this.state.staged[key]}
+      // deployed[_id]._id = _id
+      // deployed[_id].pokeHeight = this.pokeHeight(deployed[_id].height)
+      // deployed[_id].pokeSpeed = this.pokeSpeed(deployed[_id].speed)
+    })
+    // staged = {}
+    console.log('deployed in place =', deployed)
     Object.keys(deployed).map(pokemon => {
-      const { width } = this.state
       const pokeHeight = deployed[pokemon].pokeHeight
       let success = false
       let i = 0
@@ -171,6 +198,15 @@ class BattleRoyale extends React.Component {
     // this will place the pokemon from the deployed array, one by one mapping through to make sure there is enough room to deploy
     // it will need to push their pokeIndex, pokemon, and unique _id to the grid
     // it will also need to determine the correct size of the pokemon
+    console.log('deployed at end of place =', deployed)
+    this.setState({
+      deployed,
+      staged,
+      benched,
+      grid,
+      pokemonDeployed: true
+    })
+    console.log('deployed in state', this.state.deployed)
   }
 
   randomDirection(){
@@ -207,8 +243,8 @@ class BattleRoyale extends React.Component {
           //   farIndex,
           //   grid
           // })
-        // }, pokemon.pokeSpeed)  
-        }, 2000) 
+        }, pokemon.pokeSpeed)  
+        // }, 2000) 
         deployed[_id].pokeTimer = this.pokeTimer
         this.setState({
           deployed
@@ -260,7 +296,10 @@ class BattleRoyale extends React.Component {
     if (!knockout) {
       // if (Object.keys(deployed).length > 1) {
       // console.log(Object.keys(deployed).length)
-      this.attackPokemon(pokemon, target, tarRelPos)
+      if (target[0] !== 'id placeholder'){
+        this.attackPokemon(pokemon, target, tarRelPos)
+      }
+      
       // }      
       this.movePokemon(grid, pokemon, target, tarRelPos)
     }
@@ -298,6 +337,7 @@ class BattleRoyale extends React.Component {
     let { attacks } = this.state
     const { attack, type1, type2, _id, spAt, pokeIndex, pokeHeight } = pokemon
     const { deployed, width, grid } = this.state
+    console.log(deployed, target)
     const { defence } = deployed[target[0]]
     const defTyp1 = deployed[target[0]].type1
     const defTyp2 = deployed[target[0]].type2
@@ -324,19 +364,13 @@ class BattleRoyale extends React.Component {
       deployed[_id].attackCounter = 0
       console.log(pokemon.name, 'did', this.damageCalculator(attack, defence, attType, defTyp1, defTyp2), 'physical', attType, 'damage against', deployed[target[0]].name, tarRelPos[0], tarRelPos[1])
     // }
-    } else if (attackCounter > 3) {
-      const attId = 'attId_' + Math.floor(Math.random() * 100000000)
-      attacks = { ...attacks, [attId]: { 'attType': attType, 'attId': attId, 'ownerId': _id, 'targetIndex': target[1], 'power': spAt, 'attIndex': attOrigin } }
-      // attacks[attId].attType = attType
-      // attacks[attId].attId = attId
-      // attacks[attId].ownerId = _id
-      // attacks[attId].targetIndex = target[1]
-      // attacks[attId].power = spAt
-      // attacks[attId].attIndex = attOrigin
-      grid[attOrigin].push('attack')
-      grid[attOrigin].push(attId)
-      grid[attOrigin].push(attType)
-      deployed[_id].attackCounter = 0
+    // } else if (attackCounter > 3) {
+    //   const attId = 'attId_' + Math.floor(Math.random() * 100000000)
+    //   attacks = { ...attacks, [attId]: { 'attType': attType, 'attId': attId, 'ownerId': _id, 'targetIndex': target[1], 'power': spAt, 'attIndex': attOrigin } }
+    //   grid[attOrigin].push('attack')
+    //   grid[attOrigin].push(attId)
+    //   grid[attOrigin].push(attType)
+    //   deployed[_id].attackCounter = 0
     }
     this.setState({ deployed, attacks, grid })
   }
@@ -467,7 +501,7 @@ class BattleRoyale extends React.Component {
     
 
     // console.log('coord values =', up, down, left, right)
-    console.log(pokemon.name, 'direction sum =', directionSum, 'curr dir', finalDir(), 'last dir', direction, 'target:', target, this.state.deployed[target[0]].name)
+    // console.log(pokemon.name, 'direction sum =', directionSum, 'curr dir', finalDir(), 'last dir', direction, 'target:', target, this.state.deployed[target[0]].name)
 
     this.makeMovement(_id, finalDir(), target)
   }
@@ -1333,8 +1367,64 @@ class BattleRoyale extends React.Component {
     console.log(detailsView)
   }
 
+  addPokemon = (e) => {
+    let { staged } = this.state
+    const { allPokemon } = this.state
+    const _id = 'id_' + Math.floor(Math.random() * 100000000)
+    const selector = allPokemon.reduce((a, pokemon) => {
+      if (pokemon.name === e.target.className){
+      // pokemon._id = _id
+      pokemon.pokeHeight = this.pokeHeight(pokemon.height)
+      pokemon.pokeSpeed = this.pokeSpeed(pokemon.speed)
+        a = pokemon
+      }
+      return a
+    }, 0)
+      selector._id = _id
+      staged[selector._id] = selector
+    this.setState({
+      staged
+    })
+    console.log(staged)
+  }
+
+  removePokemon = (e) => {
+    let { staged } = this.state
+    const _id = e.target.className
+    delete staged[_id]
+    this.setState({
+      staged
+    })
+    console.log(staged)
+  }
+
+  addAllPokemon = (e) => {
+    let { staged } = this.state
+    const { allPokemon } = this.state
+    // const _id = 'id_' + Math.floor(Math.random() * 100000000)
+    // const selector = allPokemon.map((pokemon) => {
+    //   pokemon._id = _id
+    //   pokemon.pokeHeight = this.pokeHeight(pokemon.height)
+    //   pokemon.pokeSpeed = this.pokeSpeed(pokemon.speed)
+    // })
+    //   selector._id = _id
+    //   staged[selector._id] = selector
+    allPokemon.map(item => {
+      const _id = 'id_' + Math.floor(Math.random() * 100000000)
+      staged[_id] = item
+      staged[_id]._id = _id
+      staged[_id].pokeHeight = this.pokeHeight(staged[_id].height)
+      staged[_id].pokeSpeed = this.pokeSpeed(staged[_id].speed)
+    })
+    this.setState({
+      staged
+    })
+    
+    console.log(staged)
+  }
+
   render() {
-    const { grid, playerIndex, testmon, gameActive, gridBuilt, width, squareHeight, count, allPokemon, detailsView } = this.state
+    const { grid, playerIndex, testmon, gameActive, gridBuilt, width, squareHeight, count, allPokemon, detailsView, pokemonDeployed, staged } = this.state
     // if (!grid[0]) return null
     // console.log(grid)
     // console.log(e.keyCode)
@@ -1343,10 +1433,10 @@ class BattleRoyale extends React.Component {
       < >
       <main className="mainBat">
         <section>
-        <input type="text" id="one" onKeyDown={this.handleKeyDown} />
+        {/* <input type="text" id="one" onKeyDown={this.handleKeyDown} /> */}
         {gridBuilt ? '' : <button onClick={this.buildGame}>Build Game</button>}
-        {(gameActive || !gridBuilt) ? '' : <button onClick={this.activatePokemon}>Start Game</button>}
-    <h1>Current count {count}</h1>
+        {pokemonDeployed ? '' : <button onClick={this.deployPokemon}>Deploy Pokemon</button>}
+        {(gameActive || !gridBuilt || !pokemonDeployed) ? '' : <button onClick={this.activatePokemon}>Start Game</button>}
         {/* <button onClick={this.movePlayerRight}>movePlayerRight</button> */}
         <div className="wrapper">
           {grid[0] ?
@@ -1359,14 +1449,32 @@ class BattleRoyale extends React.Component {
 
         </div>
         </section>
+        <section>
+        <div>
+          <h2>Staged</h2>
+          <div>
+            {Object.keys(staged).map(pokemon => {
+              return (
+              <div key={pokemon}>
+                <ViewCard {...staged[pokemon]}/>
+                <button className={staged[pokemon]._id} onClick={this.removePokemon}>Remove Pokemon</button>
+              </div>)
+            })
+          }
+          </div>
+        </div>
+      </section>
       
         <section>
         <div>
+        <h2>Select Pokemon</h2>
+        <button onClick={this.addAllPokemon}>Add All Pokemon</button>
           <div>
             {allPokemon.map(pokemon => (
               <div key={pokemon.id}>
                 <ViewCard {...pokemon}/>
                 <button className={pokemon.id} onClick={this.viewStats}>View Stats</button>
+                <button className={pokemon.name} onClick={this.addPokemon}>Add to Game</button>
               </div>
             ))}
           </div>
@@ -1399,3 +1507,8 @@ class BattleRoyale extends React.Component {
   }
 }
 export default BattleRoyale
+
+
+
+
+
