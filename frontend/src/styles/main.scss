@@ -36,6 +36,8 @@ div.grid {
   // height: 720px;
   display: flex;
   flex-wrap: wrap;
+  background-image: 'https://i.redd.it/o8a7u5vl6hb41.png';
+  background-color: lightblue;
 }
 
 // div.grid-item {
@@ -102,7 +104,7 @@ div.flying {
 .viewCard {
   width: 100px;
   height: 100px;
-  background-color: red;
+  // background-color: red;
   justify-content: center;
 }
 
@@ -113,4 +115,29 @@ div.flying {
 
 .viewImage {
   height: 50px;
+}
+
+div.frontPage {
+  background-image: 'https://middleofnowheregaming.files.wordpress.com/2015/02/pokemon-list.png';
+}
+
+.detailsBoard {
+  width: 150px;
+}
+
+.centerIt {
+  display: flex;
+  // justify-content: center;
+  align-content: center;
+  flex-direction: column;
+}
+
+.scroll {
+  height: '400px';
+                          // width: '80px',
+                          // backgroundSize: 'cover',
+                          // backgroundPosition: 'center',
+                          // borderRadius: '50%',
+                          position: 'absolute';
+                          overflow: 'auto';
 }

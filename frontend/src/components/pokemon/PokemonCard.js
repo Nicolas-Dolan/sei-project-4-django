@@ -13,7 +13,7 @@ import { Link } from 'react-router-dom'
           <img src={frontImg} alt={name} />
         </figure>
       </div>
-      <div className="card-content">
+      {/* <div className="card-content">
         <h4 className="title is-5">Stats</h4>
         <h5 className="title is-6">HP: {hp}</h5>
         <h5 className="title is-6">Attack: {attack}</h5>
@@ -37,7 +37,7 @@ import { Link } from 'react-router-dom'
         <h4 className="title is-5">Build</h4>
         <h5 className="title is-6">Height: {height}</h5>
         <h5 className="title is-6">Shape: {shape}</h5>
-      </div>
+      </div> */}
       <div className="card-content">
         <h4 className="title is-5">Description</h4>
         <p>{description}</p>

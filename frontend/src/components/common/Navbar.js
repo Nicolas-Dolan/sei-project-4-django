@@ -49,7 +49,7 @@ class Navbar extends React.Component {
     console.log('is auth =', Auth.isAuthenticated())
     // console.log(currentUser)
     return (
-      <nav className="navbar is-dark">
+      <nav className="navbar is-danger">
         <div className="container">
           <div className="navbar-brand">
             <Link className="navbar-item" to="/">Pokemon Unlimited</Link>
@@ -62,7 +62,7 @@ class Navbar extends React.Component {
           <div className={`navbar-menu ${navbarOpen ? 'is-active' : ''}`}>
             <div className="navbar-end">
               <Link className="navbar-item" to="/battleroyale">Battle Royale</Link>
-              <Link className="navbar-item" to="/seeds">Generate Seeds</Link>
+              {/* <Link className="navbar-item" to="/seeds">Generate Seeds</Link> */}
               <Link className="navbar-item" to="/pokemons">PokeDex</Link>
               {!Auth.isAuthenticated() && <Link className="navbar-item" to="/register">Register</Link>}
               {!Auth.isAuthenticated() && <Link className="navbar-item" to="/login">Login</Link>}

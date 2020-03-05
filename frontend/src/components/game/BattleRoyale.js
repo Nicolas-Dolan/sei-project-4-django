@@ -6,7 +6,16 @@ import DetailsCard from './DetailsCard'
 class BattleRoyale extends React.Component {
   state = {
     allPokemon: [],
-    detailsView: { name: 'none'},
+    detailsView: { 
+      name: 'Who\'s that pokemon?',
+  frontImg: 'https://famequiz.com/wp-content/uploads/2019/09/Screenshot_1.png',
+hp: '???',
+attack: '???',
+defence: '???',
+spAt: '???',
+spDf: '???',
+speed: '???',
+},
     count: 0,
     game: 'test',
     gridBuilt: false,
@@ -48,7 +57,7 @@ class BattleRoyale extends React.Component {
     console.log('component did mount')
     try {
       const res = await axios.get('api/pokemons/')
-      console.log('res =', res.data)
+      // console.log('res =', res.data)
       const { grid, width } = this.state
     let i = 0
     for (i = 0; i < (width * width); i++) {
@@ -75,16 +84,9 @@ class BattleRoyale extends React.Component {
     const { deployed } = this.state
 
     Object.keys(deployed).map(_id => {
-      const pokemon = deployed[_id]
-      const { pokeTimerId } = pokemon
-      clearInterval(pokeTimerId)
-      this.pokeTimer = clearInterval(() => {
-        this.setState({
-          pokeTimerId
-        })
-      }) 
-
+      clearInterval(deployed[_id].pokeTimer)
     })
+    this.setState({ deployed })
     console.log('component will unmount')
   }
 
@@ -108,6 +110,39 @@ class BattleRoyale extends React.Component {
     // console.log(this.state)
   }
 
+  pauseGame = () => {
+    const { deployed } = this.state
+
+    Object.keys(deployed).map(_id => {
+      clearInterval(deployed[_id].pokeTimer)
+    })
+    this.setState({ 
+      deployed,
+      gameActive: false
+     })
+
+  }
+
+  resetGame = () => {
+    let { grid } = this.state
+    const { width } = this.state
+    grid = []
+    let i = 0
+    for (i = 0; i < (width * width); i++) {
+      // grid.push(['grid-item'])
+      grid.push([])
+    }
+    this.setState({
+      pokemonDeployed: false,
+      gameActive: false,
+      deployed: {},
+      benched: {},
+      attacks: {},
+      grid
+     })
+    
+  }
+
   // deployPokemon(grid, deployed, staged, benched) {
   //   // this.placePlayer(grid)
   //   // this.portPokemon(staged, deployed)
@@ -126,7 +161,7 @@ class BattleRoyale extends React.Component {
   }
 
   portPokemon(staged, deployed){
-    console.log('staged in port =', staged)
+    // console.log('staged in port =', staged)
     Object.keys(staged).map(key => {
       const _id = key
       deployed[_id] = {...key}
@@ -134,11 +169,14 @@ class BattleRoyale extends React.Component {
       // deployed[_id].pokeHeight = this.pokeHeight(deployed[_id].height)
       // deployed[_id].pokeSpeed = this.pokeSpeed(deployed[_id].speed)
     })
-    console.log('deployed', deployed)
+    // console.log('deployed', deployed)
   }
 
   deployPokemon = () => {
     const { deployed, staged, benched, grid, width } = this.state
+    // Object.keys(staged).map(key => {
+    //   staged[key]._id = key
+    // })
     Object.keys(staged).map(key => {
 
       deployed[key] = {...this.state.staged[key]}
@@ -147,7 +185,7 @@ class BattleRoyale extends React.Component {
       // deployed[_id].pokeSpeed = this.pokeSpeed(deployed[_id].speed)
     })
     // staged = {}
-    console.log('deployed in place =', deployed)
+    // console.log('deployed in place =', deployed)
     Object.keys(deployed).map(pokemon => {
       const pokeHeight = deployed[pokemon].pokeHeight
       let success = false
@@ -198,7 +236,7 @@ class BattleRoyale extends React.Component {
     // this will place the pokemon from the deployed array, one by one mapping through to make sure there is enough room to deploy
     // it will need to push their pokeIndex, pokemon, and unique _id to the grid
     // it will also need to determine the correct size of the pokemon
-    console.log('deployed at end of place =', deployed)
+    // console.log('deployed at end of place =', deployed)
     this.setState({
       deployed,
       staged,
@@ -206,7 +244,7 @@ class BattleRoyale extends React.Component {
       grid,
       pokemonDeployed: true
     })
-    console.log('deployed in state', this.state.deployed)
+    // console.log('deployed in state', this.state.deployed)
   }
 
   randomDirection(){
@@ -321,8 +359,8 @@ class BattleRoyale extends React.Component {
       grid[pokeIndex].splice(grid[pokeIndex].indexOf('pokeIndex'), 1)
       this.eraseBlock(pokeIndex, farIndex, 'pokemon', grid)
       this.eraseBlock(pokeIndex, farIndex, _id, grid)
-      console.log(pokemon.name, 'received', previousHealth - currentHealth, damageReceived, 'damage')
-      console.log(pokemon.name, 'has fainted')
+      // console.log(pokemon.name, 'received', previousHealth - currentHealth, damageReceived, 'damage')
+      // console.log(pokemon.name, 'has fainted')
       this.setState({
         grid
       })
@@ -337,12 +375,12 @@ class BattleRoyale extends React.Component {
     let { attacks } = this.state
     const { attack, type1, type2, _id, spAt, pokeIndex, pokeHeight } = pokemon
     const { deployed, width, grid } = this.state
-    console.log(deployed, target)
+    // console.log(deployed, target)
     const { defence } = deployed[target[0]]
     const defTyp1 = deployed[target[0]].type1
     const defTyp2 = deployed[target[0]].type2
     const attOrigin = pokeIndex + (Math.round(pokeHeight / 2) - 1) + ((Math.round(pokeHeight / 2) - 1) * width)
-    console.log('attacks', attacks)
+    // console.log('attacks', attacks)
     
     attackCounter++
     deployed[_id].attackCounter = attackCounter
@@ -362,8 +400,9 @@ class BattleRoyale extends React.Component {
       deployed[target[0]].currentHealth = deployed[target[0]].currentHealth - this.damageCalculator(attack, defence, attType, defTyp1, defTyp2)
       deployed[target[0]].damageReceived = attType
       deployed[_id].attackCounter = 0
-      console.log(pokemon.name, 'did', this.damageCalculator(attack, defence, attType, defTyp1, defTyp2), 'physical', attType, 'damage against', deployed[target[0]].name, tarRelPos[0], tarRelPos[1])
+      // console.log(pokemon.name, 'did', this.damageCalculator(attack, defence, attType, defTyp1, defTyp2), 'physical', attType, 'damage against', deployed[target[0]].name, tarRelPos[0], tarRelPos[1])
     // }
+    //! the below code is for ranged attacks which has been commented out for the time being
     // } else if (attackCounter > 3) {
     //   const attId = 'attId_' + Math.floor(Math.random() * 100000000)
     //   attacks = { ...attacks, [attId]: { 'attType': attType, 'attId': attId, 'ownerId': _id, 'targetIndex': target[1], 'power': spAt, 'attIndex': attOrigin } }
@@ -406,7 +445,8 @@ class BattleRoyale extends React.Component {
     let right = 0
     let left = 0
 
-    if (pokemon.attack <= pokemon.spAt){
+    //! the below code gets attack-favouring pokemon to charge: condition is commented out for now
+    // if (pokemon.attack > pokemon.spAt){
       if (tarRelPos[0] === 'left') {
         left += 10
         if (tarRelPos[2] > tarRelPos[3]){
@@ -436,7 +476,7 @@ class BattleRoyale extends React.Component {
         up += 5
         down += 5
       }
-    }
+    // }
   
     if (direction === 'up') {
       up += 0.5
@@ -1073,47 +1113,46 @@ class BattleRoyale extends React.Component {
       fairy: 1,
       null: 1
     },
-    //! I gave up from here onwards
     ice: {
       normal: 1,
-      fire: 1,
-      water: 1,
+      fire: 0.5,
+      water: 0.5,
       electric: 1,
-      grass: 1,
-      ice: 1,
+      grass: 2,
+      ice: 0.5,
       fighting: 1,
       poison: 1,
-      ground: 1,
-      flying: 1,
+      ground: 2,
+      flying: 2,
       psychic: 1,
       bug: 1,
       rock: 1,
       ghost: 1,
-      dragon: 1,
+      dragon: 2,
       dark: 1,
-      steel: 1,
+      steel: 0.5,
       fairy: 1,
       null: 1
     },
     fighting: {
-      normal: 1,
+      normal: 2,
       fire: 1,
       water: 1,
       electric: 1,
       grass: 1,
-      ice: 1,
+      ice: 2,
       fighting: 1,
-      poison: 1,
+      poison: 0.5,
       ground: 1,
-      flying: 1,
-      psychic: 1,
-      bug: 1,
-      rock: 1,
-      ghost: 1,
+      flying: 0.5,
+      psychic: 0.5,
+      bug: 0.5,
+      rock: 2,
+      ghost: 0,
       dragon: 1,
-      dark: 1,
-      steel: 1,
-      fairy: 1,
+      dark: 2,
+      steel: 2,
+      fairy: 0.5,
       null: 1
     },
     poison: {
@@ -1139,22 +1178,22 @@ class BattleRoyale extends React.Component {
     },
     ground: {
       normal: 1,
-      fire: 1,
+      fire: 2,
       water: 1,
-      electric: 1,
-      grass: 1,
+      electric: 2,
+      grass: 0.5,
       ice: 1,
       fighting: 1,
-      poison: 1,
+      poison: 2,
       ground: 1,
-      flying: 1,
+      flying: 0,
       psychic: 1,
-      bug: 1,
-      rock: 1,
+      bug: 0.5,
+      rock: 2,
       ghost: 1,
       dragon: 1,
       dark: 1,
-      steel: 1,
+      steel: 2,
       fairy: 1,
       null: 1
     },
@@ -1202,48 +1241,48 @@ class BattleRoyale extends React.Component {
     },
     bug: {
       normal: 1,
-      fire: 1,
+      fire: 0.5,
       water: 1,
       electric: 1,
-      grass: 1,
+      grass: 2,
       ice: 1,
-      fighting: 1,
-      poison: 1,
+      fighting: 0.5,
+      poison: 0.5,
       ground: 1,
-      flying: 1,
-      psychic: 1,
+      flying: 0.5,
+      psychic: 2,
       bug: 1,
       rock: 1,
-      ghost: 1,
+      ghost: 0.5,
       dragon: 1,
-      dark: 1,
-      steel: 1,
-      fairy: 1,
+      dark: 2,
+      steel: 0.5,
+      fairy: 0.5,
       null: 1
     },
     rock: {
       normal: 1,
-      fire: 1,
+      fire: 2,
       water: 1,
       electric: 1,
       grass: 1,
-      ice: 1,
-      fighting: 1,
+      ice: 2,
+      fighting: 0.5,
       poison: 1,
-      ground: 1,
-      flying: 1,
+      ground: 0.5,
+      flying: 2,
       psychic: 1,
-      bug: 1,
+      bug: 2,
       rock: 1,
       ghost: 1,
       dragon: 1,
       dark: 1,
-      steel: 1,
+      steel: 0.5,
       fairy: 1,
       null: 1
     },
     ghost: {
-      normal: 1,
+      normal: 0,
       fire: 1,
       water: 1,
       electric: 1,
@@ -1253,12 +1292,12 @@ class BattleRoyale extends React.Component {
       poison: 1,
       ground: 1,
       flying: 1,
-      psychic: 1,
+      psychic: 2,
       bug: 1,
       rock: 1,
-      ghost: 1,
+      ghost: 2,
       dragon: 1,
-      dark: 1,
+      dark: 0.5,
       steel: 1,
       fairy: 1,
       null: 1
@@ -1278,10 +1317,10 @@ class BattleRoyale extends React.Component {
       bug: 1,
       rock: 1,
       ghost: 1,
-      dragon: 1,
+      dragon: 2,
       dark: 1,
-      steel: 1,
-      fairy: 1,
+      steel: 0.5,
+      fairy: 0,
       null: 1
     },
     dark: {
@@ -1291,59 +1330,59 @@ class BattleRoyale extends React.Component {
       electric: 1,
       grass: 1,
       ice: 1,
-      fighting: 1,
+      fighting: 0.5,
       poison: 1,
       ground: 1,
       flying: 1,
-      psychic: 1,
+      psychic: 2,
       bug: 1,
       rock: 1,
-      ghost: 1,
+      ghost: 2,
       dragon: 1,
-      dark: 1,
+      dark: 0.5,
       steel: 1,
-      fairy: 1,
+      fairy: 0.5,
       null: 1
     },
     steel: {
       normal: 1,
-      fire: 1,
-      water: 1,
-      electric: 1,
+      fire: 0.5,
+      water: 0.5,
+      electric: 0.5,
       grass: 1,
-      ice: 1,
+      ice: 2,
       fighting: 1,
       poison: 1,
       ground: 1,
       flying: 1,
       psychic: 1,
       bug: 1,
-      rock: 1,
+      rock: 2,
       ghost: 1,
       dragon: 1,
       dark: 1,
-      steel: 1,
-      fairy: 1,
+      steel: 0.5,
+      fairy: 2,
       null: 1
     },
     fairy: {
       normal: 1,
-      fire: 1,
+      fire: 0.5,
       water: 1,
       electric: 1,
       grass: 1,
       ice: 1,
-      fighting: 1,
-      poison: 1,
+      fighting: 2,
+      poison: 0.5,
       ground: 1,
       flying: 1,
       psychic: 1,
       bug: 1,
       rock: 1,
       ghost: 1,
-      dragon: 1,
-      dark: 1,
-      steel: 1,
+      dragon: 2,
+      dark: 2,
+      steel: 0.5,
       fairy: 1,
       null: 1
     }
@@ -1352,11 +1391,12 @@ class BattleRoyale extends React.Component {
   viewStats = (e) => {
     let { detailsView } = this.state
     const { allPokemon } = this.state
-    console.log(e.target.className, allPokemon)
+    // console.log(e.target.className, allPokemon)
     const selector = allPokemon.reduce((a, pokemon) => {
-      if (pokemon.id == e.target.className){
+      if (pokemon.id.toString() === e.target.className){
+        // if (e.target.hasClass(pokemon.id.toString())){
         a = pokemon
-        console.log('id =', pokemon.id)
+        // console.log('id =', pokemon.id)
       }
       return a
     })
@@ -1364,13 +1404,31 @@ class BattleRoyale extends React.Component {
     this.setState({
       detailsView
     })
-    console.log(detailsView)
+    // console.log(detailsView)
+  }
+
+  removeStats = () => {
+    const { detailsView } = this.state
+    // const { allPokemon } = this.state
+    // console.log(e.target.className, allPokemon)
+    // const selector = allPokemon.reduce((a, pokemon) => {
+    //   if (pokemon.id == e.target.className){
+    //     a = pokemon
+    //     console.log('id =', pokemon.id)
+    //   }
+    //   return a
+    // })
+    // detailsView = {...selector}
+    this.setState({
+      detailsView: { name: 'none'}
+    })
+    // console.log(detailsView)
   }
 
   addPokemon = (e) => {
     let { staged } = this.state
     const { allPokemon } = this.state
-    const _id = 'id_' + Math.floor(Math.random() * 100000000)
+    // const _id = 'id_' + Math.floor(Math.random() * 100000000)
     const selector = allPokemon.reduce((a, pokemon) => {
       if (pokemon.name === e.target.className){
       // pokemon._id = _id
@@ -1380,12 +1438,16 @@ class BattleRoyale extends React.Component {
       }
       return a
     }, 0)
-      selector._id = _id
-      staged[selector._id] = selector
+    const _id = 'id_' + Math.floor(Math.random() * 100000000)
+      // selector._id = _id
+      staged[_id] = {...selector}
+      Object.keys(staged).map(key => {
+        staged[key]._id = key
+      })
     this.setState({
       staged
     })
-    console.log(staged)
+    // console.log(staged)
   }
 
   removePokemon = (e) => {
@@ -1395,7 +1457,7 @@ class BattleRoyale extends React.Component {
     this.setState({
       staged
     })
-    console.log(staged)
+    // console.log(staged)
   }
 
   addAllPokemon = (e) => {
@@ -1419,9 +1481,19 @@ class BattleRoyale extends React.Component {
     this.setState({
       staged
     })
-    
-    console.log(staged)
   }
+
+    removeAllPokemon = () => {
+      const { staged } = this.state
+      Object.keys(staged).map(_id => {
+        delete staged[_id]
+      })
+      this.setState({
+        staged
+      })
+  }
+
+
 
   render() {
     const { grid, playerIndex, testmon, gameActive, gridBuilt, width, squareHeight, count, allPokemon, detailsView, pokemonDeployed, staged } = this.state
@@ -1437,26 +1509,31 @@ class BattleRoyale extends React.Component {
         {gridBuilt ? '' : <button onClick={this.buildGame}>Build Game</button>}
         {pokemonDeployed ? '' : <button onClick={this.deployPokemon}>Deploy Pokemon</button>}
         {(gameActive || !gridBuilt || !pokemonDeployed) ? '' : <button onClick={this.activatePokemon}>Start Game</button>}
+        {(gameActive && pokemonDeployed) ? <button onClick={this.pauseGame}>Stop Game</button> : ''}
+        {(!gameActive && pokemonDeployed) ? <button onClick={this.resetGame}>Reset Game</button> : ''}
         {/* <button onClick={this.movePlayerRight}>movePlayerRight</button> */}
         <div className="wrapper">
           {grid[0] ?
             <div className="grid" style={{ height: `${width * squareHeight}px`, width: `${width * squareHeight}px` }}>
               {/* {grid.map((item, i) => <div key={i.toString()} className={item.reduce((a, c) => a + ' ' + c)}>{i.toString()}</div>)} */}
-              {grid.map((item, i) => <div key={i.toString()} style={{ width: `${squareHeight}px`, height: `${squareHeight}px`, border: '0.5px dashed black' }} className={item[0] ? item.reduce((a, c) => a + ' ' + c) : ''}>{item.includes('player') ? <img className="playerImage" src={testmon.frontImg} /> : ''}{item.includes('pokeIndex') ? <img className="pokeImage" src={this.findImage(item)} style={{ height: `${this.findPokeProp(item, 'pokeHeight') * squareHeight}px` }}/> : ''}</div>)}
+              {grid.map((item, i) => <div key={i.toString()} style={{ width: `${squareHeight}px`, height: `${squareHeight}px` }} className={item[0] ? item.reduce((a, c) => a + ' ' + c) : ''}>{item.includes('player') ? <img className="playerImage" src={testmon.frontImg} /> : ''}{item.includes('pokeIndex') ? <img className="pokeImage" src={this.findImage(item)} style={{ height: `${this.findPokeProp(item, 'pokeHeight') * squareHeight}px` }}/> : ''}</div>)}
             </div>
             : null
           }
 
         </div>
         </section>
-        <section>
+        <section className="centerIt">
         <div>
           <h2>Staged</h2>
-          <div>
+          <button onClick={this.removeAllPokemon}>Remove All Pokemon</button>
+          <div className="centerIt">
             {Object.keys(staged).map(pokemon => {
               return (
-              <div key={pokemon}>
-                <ViewCard {...staged[pokemon]}/>
+              <div key={pokemon.id} className={staged[pokemon].id}>
+              {/* <div key={pokemon.id} className={staged[pokemon].id} onMouseOver={this.viewStats} onMouseOut={this.removeStats}> */}
+                <ViewCard {...staged[pokemon]} className={pokemon.id}  viewStats={this.viewStats}/>
+                <button className={staged[pokemon].id} onClick={this.viewStats}>View Stats</button>
                 <button className={staged[pokemon]._id} onClick={this.removePokemon}>Remove Pokemon</button>
               </div>)
             })
@@ -1465,14 +1542,15 @@ class BattleRoyale extends React.Component {
         </div>
       </section>
       
-        <section>
+        <section className="centerIt">
         <div>
         <h2>Select Pokemon</h2>
         <button onClick={this.addAllPokemon}>Add All Pokemon</button>
           <div>
             {allPokemon.map(pokemon => (
-              <div key={pokemon.id}>
-                <ViewCard {...pokemon}/>
+              <div key={pokemon.id} className={pokemon.id}>
+              {/* <div key={pokemon.id} className={pokemon.id} onMouseOver={this.viewStats} onMouseOut={this.removeStats}> */}
+                <ViewCard {...pokemon} className={pokemon.id} viewStats={this.viewStats}/>
                 <button className={pokemon.id} onClick={this.viewStats}>View Stats</button>
                 <button className={pokemon.name} onClick={this.addPokemon}>Add to Game</button>
               </div>
@@ -1480,10 +1558,10 @@ class BattleRoyale extends React.Component {
           </div>
         </div>
       </section>
-      <section>
+      <section className="detailsBoard">
         <div>
           <div>
-            {detailsView.name !== 'none' ? 
+            {/* {detailsView.name !== 'none' ?  */}
               <div>
                <h3>{detailsView.name}</h3>
                <img src={detailsView.frontImg}/>
@@ -1494,8 +1572,8 @@ class BattleRoyale extends React.Component {
             <p>Sp. Defence: {detailsView.spDf}</p>
             <p>Speed: {detailsView.speed}</p>
               </div>
-              : ''
-  }
+              {/* : ''
+  } */}
           </div>
         </div>
       </section>

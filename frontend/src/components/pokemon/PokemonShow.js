@@ -104,12 +104,22 @@ class PokemonShow extends React.Component {
               <p>Created by: {pokemon.owner.username}</p>
             </div>
             <div className="column is-half">
-              <h4 className="title is-4">Year</h4>
+              <h4 className="title is-4">PokeDex Number</h4>
               <p>{pokemon.dexNum}</p>
               <hr />
-              <h4 className="title is-4">Actor</h4>
+              {/* <div className="card-content"> */}
+        <h4 className="title is-5">Stats</h4>
+        <h5 className="title is-6">HP: {pokemon.hp}</h5>
+        <h5 className="title is-6">Attack: {pokemon.attack}</h5>
+        <h5 className="title is-6">Defence: {pokemon.defence}</h5>
+        <h5 className="title is-6">Sp. Attack: {pokemon.spAt}</h5>
+        <h5 className="title is-6">Sp. Defence: {pokemon.spDf}</h5>
+        <h5 className="title is-6">Speed: {pokemon.speed}</h5>
+      {/* </div> */}
+      <hr />
+              <h4 className="title is-4">Description</h4>
               <hr />
-              <p>{pokemon.shape}</p>
+              <p>{pokemon.description}</p>
               <hr />
               {/* <h4 className="title is-4">Comments</h4>
               <hr />
