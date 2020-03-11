@@ -23,9 +23,12 @@ Including another URLconf
 # ]
 
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, re_path # <-- added this new import re_path
+from .views import index
+
 urlpatterns = [
     path('api/admin/', admin.site.urls),
     path('api/pokemons/', include('pokemons.urls')),
-    path('api/', include('jwt_auth.urls'))
+    path('api/', include('jwt_auth.urls')),
+    re_path(r'^.*$', index)
 ]
