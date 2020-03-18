@@ -46,6 +46,7 @@ import PokemonIndex from './components/pokemon/PokemonIndex'
 import SeedGenerator from './components/pokemon/SeedGenerator'
 import BattleRoyale from './components/game/BattleRoyale'
 import PokemonShow from './components/pokemon/PokemonShow'
+import PokemonNew from './components/pokemon/PokemonNew'
 
 // const App = () => (
 //   <BrowserRouter>
@@ -106,6 +107,7 @@ const App = () => (
         <SecureRoute path="/films/new" component={FilmNew} />
         <Route path="/films/:id" component={FilmShow} />
         <Route path="/films" component={FilmIndex} /> */}
+        <SecureRoute path="/pokemons/new" component={PokemonNew} />
         <Route path="/battleroyale" component={BattleRoyale} />
         <Route path="/pokemons/:id" component={PokemonShow} />
         <Route path="/pokemons" component={PokemonIndex} />
