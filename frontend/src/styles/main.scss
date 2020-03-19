@@ -118,7 +118,65 @@ div.flying {
 }
 
 div.frontPage {
-  background-image: 'https://middleofnowheregaming.files.wordpress.com/2015/02/pokemon-list.png';
+  // background-image: url('https://middleofnowheregaming.files.wordpress.com/2015/02/pokemon-list.png');
+  // background-image: url('./../assets/backgroundImage.png');
+  // background-color: black;
+
+}
+  @keyframes animatedBackground {
+    // from { background-position: 0 0; }
+    // to { background-position: 100% 0; }
+    // 0% {
+    //   background-position: 0 0;
+    // }
+    // 50% {
+    //   background-position: 100% 100%;
+    // }
+    // 100% {
+    //   background-position: 0 0;
+    // }
+    0% {
+      background-position: 0 0;
+    }
+    25% {
+      background-position: 100% 100%;
+    }
+    38% {
+      background-position: 50% 50%;
+    }
+    50% {
+      background-position: 0 100%;
+    }
+    75% {
+      background-position: 100% 0;
+    }
+    88% {
+      background-position: 50% 50%;
+    }
+    100% {
+      background-position: 0 0;
+    }
+}
+
+#animate-area   { 
+    // width: 560px; 
+    // height: 400px; 
+    height: 100%;
+    background-image: url('./../assets/backgroundImage.png');
+    background-position: 0px 0px;
+    background-repeat: repeat-x;
+    animation: animatedBackground 120s linear infinite;
+}
+
+@import url('https://fonts.googleapis.com/css?family=Sonsie+One&display=swap');
+
+.mainHeader {
+  font-family: 'Sonsie One', cursive;
+  color: red;
+  text-shadow: -1px -1px 0 white, 1px -1px 0 white, -1px 1px 0 white, 1px 1px 0 white;
+  font-size: 10px;
+  // text-shadow: -3px -3px 0 blue, 3px -3px 0 blue, -3px 3px 0 blue, 3px 3px 0 blue;
+  // text-shadow: -1px -1px 0 red, 1px -1px 0 red, -1px 1px 0 red, 1px 1px 0 red;
 }
 
 .detailsBoard {
@@ -128,6 +186,13 @@ div.frontPage {
 .centerIt {
   display: flex;
   // justify-content: center;
+  align-content: center;
+  flex-direction: column;
+}
+
+.centerIt2 {
+  display: flex;
+  justify-content: center;
   align-content: center;
   flex-direction: column;
 }
