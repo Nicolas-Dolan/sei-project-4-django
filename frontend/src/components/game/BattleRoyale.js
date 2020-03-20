@@ -2,7 +2,7 @@ import React from 'react'
 import axios from 'axios'
 import ViewCard from './ViewCard'
 import DetailsCard from './DetailsCard'
-// import front from './../assets/1/front.gif'
+import bulbback from './../../assets/1/back.gif'
 class BattleRoyale extends React.Component {
   state = {
     allPokemon: [],
