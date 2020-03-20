@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "ccac6e86230d31ba675f3ff1088264ff",
+    "revision": "726af486f2fb35b12ec268f19640b573",
     "url": "/index.html"
   },
   {
@@ -8,8 +8,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/static/css/2.5dabca3a.chunk.css"
   },
   {
-    "revision": "6bd8a4384cf717f24f2c",
-    "url": "/static/css/main.eff9a741.chunk.css"
+    "revision": "32f19c66a2411f6ce6b8",
+    "url": "/static/css/main.c0ec4ea7.chunk.css"
   },
   {
     "revision": "d940f058bc04166660d0",
@@ -20,8 +20,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/static/js/2.3a59be56.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "6bd8a4384cf717f24f2c",
-    "url": "/static/js/main.a7daeb88.chunk.js"
+    "revision": "32f19c66a2411f6ce6b8",
+    "url": "/static/js/main.7ddec4db.chunk.js"
   },
   {
     "revision": "a8139511e7e3c6f8467f",
@@ -32,8 +32,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/static/media/Pokemon-Logo.7560923d.png"
   },
   {
-    "revision": "4e4a3b99acaa85c33ed82093e3e24a17",
-    "url": "/static/media/back.4e4a3b99.gif"
+    "revision": "207859d23f211b46bd7eb531e1e8f7b0",
+    "url": "/static/media/arena.207859d2.png"
   },
   {
     "revision": "495781931bd184a15bfa4cc7b972c059",

@@ -36,7 +36,8 @@ div.grid {
   // height: 720px;
   display: flex;
   flex-wrap: wrap;
-  background-image: 'https://i.redd.it/o8a7u5vl6hb41.png';
+  background-image: url('./../assets/arena.png');
+  background-size: cover;
   background-color: lightblue;
 }
 
@@ -197,12 +198,12 @@ div.frontPage {
   flex-direction: column;
 }
 
-.scroll {
+div.scrollBox {
   height: '400px';
                           // width: '80px',
                           // backgroundSize: 'cover',
                           // backgroundPosition: 'center',
                           // borderRadius: '50%',
-                          position: 'absolute';
-                          overflow: 'auto';
+                          // position: 'absolute';
+                          overflow-y: auto;
 }

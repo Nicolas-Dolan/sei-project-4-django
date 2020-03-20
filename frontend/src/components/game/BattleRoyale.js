@@ -2,7 +2,7 @@ import React from 'react'
 import axios from 'axios'
 import ViewCard from './ViewCard'
 import DetailsCard from './DetailsCard'
-import bulbback from './../../assets/1/back.gif'
+// import bulbback from './../../assets/1/back.gif'
 class BattleRoyale extends React.Component {
   state = {
     allPokemon: [],
@@ -783,7 +783,9 @@ speed: '???',
   }
 
   pokeHeight(height){
-    if (height < 10) {
+    if (height < 5) {
+      return 2
+    } else if (height < 10) {
       return 3
     } else if (height < 15) {
       return 4
@@ -1514,7 +1516,7 @@ speed: '???',
         {/* <button onClick={this.movePlayerRight}>movePlayerRight</button> */}
         <div className="wrapper">
           {grid[0] ?
-            <div className="grid" style={{ height: `${width * squareHeight}px`, width: `${width * squareHeight}px` }}>
+            <div className="grid" style={{ height: `${width * squareHeight}px`, width: `${width * squareHeight}px`, backgroundImage: 'https://i.redd.it/o8a7u5vl6hb41.png' }}>
               {/* {grid.map((item, i) => <div key={i.toString()} className={item.reduce((a, c) => a + ' ' + c)}>{i.toString()}</div>)} */}
               {grid.map((item, i) => <div key={i.toString()} style={{ width: `${squareHeight}px`, height: `${squareHeight}px` }} className={item[0] ? item.reduce((a, c) => a + ' ' + c) : ''}>{item.includes('player') ? <img className="playerImage" src={testmon.frontImg} /> : ''}{item.includes('pokeIndex') ? <img className="pokeImage" src={this.findImage(item)} style={{ height: `${this.findPokeProp(item, 'pokeHeight') * squareHeight}px` }}/> : ''}</div>)}
             </div>
@@ -1527,7 +1529,7 @@ speed: '???',
         <div>
           <h2>Staged</h2>
           <button onClick={this.removeAllPokemon}>Remove All Pokemon</button>
-          <div className="centerIt">
+          <div className="centerIt scrollBox" style={{ height: '560px' }}>
             {Object.keys(staged).map(pokemon => {
               return (
               <div key={pokemon.id} className={staged[pokemon].id}>
@@ -1546,7 +1548,7 @@ speed: '???',
         <div>
         <h2>Select Pokemon</h2>
         <button onClick={this.addAllPokemon}>Add All Pokemon</button>
-          <div>
+          <div className="scrollBox" style={{ height: '560px' }}>
             {allPokemon.sort(function(a, b) {
     return a.dexNum - b.dexNum;
 }).map(pokemon => (
