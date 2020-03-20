@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 // const PokemonCard = ({ stats: { name, id, sprites, height, stats, types }, species: { shape, flavor_text_entries } }) => (
   const PokemonCard = ({id, name, frontImg, backImg, hp, attack, defence, spAt, spDf, speed, type1, type2, height, shape, description}) => (
   <div key={id} className="column is-one-third-desktop is-one-third-tablet is-half-mobile">
-    <Link to={`/pokemons/${id}`}>
+    <Link to={`/pokemons/${id}/`}>
     <div className="card">
       <div className="card-header">
         <h4 className="card-header-title">{name}</h4>

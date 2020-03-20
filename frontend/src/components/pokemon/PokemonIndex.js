@@ -43,7 +43,9 @@ class PokemonIndex extends React.Component {
       <section className="section">
         <div className="container">
           <div className="columns is-mobile is-multiline">
-            {this.state.pokemons.map(pokemon => (
+            {this.state.pokemons.sort(function(a, b) {
+    return a.dexNum - b.dexNum;
+}).map(pokemon => (
               <PokemonCard key={pokemon.id} {...pokemon} />
             ))}
           </div>

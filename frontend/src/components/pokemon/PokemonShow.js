@@ -15,7 +15,7 @@ class PokemonShow extends React.Component {
   async componentDidMount() {
     const pokemonId = this.props.match.params.id
     try {
-      const res = await axios.get(`/api/pokemons/${pokemonId}`)
+      const res = await axios.get(`/api/pokemons/${pokemonId}/`)
       this.setState({ pokemon: res.data })
     } catch (err) {
       console.log(err)
@@ -90,7 +90,7 @@ class PokemonShow extends React.Component {
   render() {
     const { pokemon } = this.state
     if (!pokemon) return null
-    console.log(pokemon)
+    console.log('pokemon=', pokemon)
     return (
       <section className="section">
         <div className="container">

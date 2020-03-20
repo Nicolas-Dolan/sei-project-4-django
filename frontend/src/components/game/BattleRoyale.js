@@ -1547,7 +1547,9 @@ speed: '???',
         <h2>Select Pokemon</h2>
         <button onClick={this.addAllPokemon}>Add All Pokemon</button>
           <div>
-            {allPokemon.map(pokemon => (
+            {allPokemon.sort(function(a, b) {
+    return a.dexNum - b.dexNum;
+}).map(pokemon => (
               <div key={pokemon.id} className={pokemon.id}>
               {/* <div key={pokemon.id} className={pokemon.id} onMouseOver={this.viewStats} onMouseOut={this.removeStats}> */}
                 <ViewCard {...pokemon} className={pokemon.id} viewStats={this.viewStats}/>
