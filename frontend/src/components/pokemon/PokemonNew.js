@@ -4,7 +4,7 @@ import Auth from '../../lib/auth'
 import PokemonForm from './PokemonForm'
 class PokemonNew extends React.Component {
   state = {
-    data: {
+    formData: {
       name: '',
       dexNum: '',
     frontImg: '',
@@ -20,33 +20,70 @@ class PokemonNew extends React.Component {
     shape: '',
     height: '',
     eggGroup: '',
-    isBaby: '',
+    isBaby: false,
     generation: '',
     description: ''
     }
   }
-  handleChange = ({ target: { name, value } }) => {
-    const data = { ...this.state.data, [name]: value }
-    this.setState({ data })
+  // types = [
+  //   { value: 'normal', label: 'Normal' },
+  //   { value: 'water', label: 'Water' },
+  //   { value: 'electric', label: 'Electric' },
+  //   { value: 'grass', label: 'Grass' },
+  //   { value: 'ice', label: 'Ice' },
+  //   { value: 'fighting', label: 'Fighting' },
+  //   { value: 'poison', label: 'Poison' },
+  //   { value: 'ground', label: 'Ground' },
+  //   { value: 'flying', label: 'Flying' },
+  //   { value: 'psychic', label: 'Psychic' },
+  //   { value: 'bug', label: 'Bug' },
+  //   { value: 'rock', label: 'Rock' },
+  //   { value: 'ghost', label: 'Ghost' },
+  //   { value: 'dragon', label: 'Dragon' },
+  //   { value: 'dark', label: 'Dark' },
+  //   { value: 'steel', label: 'Steel' },
+  //   { value: 'fairy', label: 'Fairy' },
+  //   { value: 'null', label: 'None' }
+  // ]
+
+
+
+  // handleChange = ({ target: { name, value } }) => {
+  //   const data = { ...this.state.data, [name]: value }
+  //   this.setState({ data })
+  // }
+
+  handleChange = ({ target: { name, value, checked, type } }) => {
+    const newValue = type === 'checkbox' ? checked : value
+    const formData = { ...this.state.formData, [name]: newValue }
+    this.setState({ formData })
   }
+  // handleMultiChange = (selected) => {
+  //   const breakfastOrder = selected ?  selected.map(item => item.value) : []
+  //   const formData = { ...this.state.formData, breakfastOrder }
+  //   this.setState({ formData })
+  // } 
+
   handleSubmit = async e => {
     e.preventDefault()
     try {
-      const res = await axios.post('/api/pokemons', this.state.data, {
+      const res = await axios.post('/api/pokemons/', this.state.formData, {
         headers: { Authorization: `Bearer ${Auth.getToken()}` } // * we include our users token in the request header to authenticate them
       })
-      this.props.history.push(`/pokemons/${res.data._id}`) // * we re-direct our user to their newly created pokemon show page, we get the id of that new pokemon from the succesful POST request response
+      this.props.history.push(`/pokemons/${res.data.id}`)
     } catch (err) {
       console.log(err.response)
     }
   }
   render() {
+    console.log(this.state.formData)
     return (
       <section className="section">
         <div className="container">
           <PokemonForm 
-            data={this.state.data}
+            formData={this.state.formData}
             handleChange={this.handleChange}
+            handleMultiChange={this.handleMultiChange}
             handleSubmit={this.handleSubmit}
           />
         </div>

@@ -207,3 +207,5 @@ div.scrollBox {
                           // position: 'absolute';
                           overflow-y: auto;
 }
+
+select#shape option[value="ball"]   { background-image: url(./../assets/shapes/ball.png)}
