@@ -25,7 +25,7 @@ class PokemonShow extends React.Component {
   handleDelete = async () => {
     const pokemonId = this.props.match.params.id
     try {
-      await axios.delete(`/api/pokemons/${pokemonId}`, {
+      await axios.delete(`/api/pokemons/${pokemonId}/`, {
         headers: { Authorization: `Bearer ${Auth.getToken()}` }
       })
       this.props.history.push('/pokemons')

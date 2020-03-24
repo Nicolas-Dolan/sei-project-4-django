@@ -36,10 +36,8 @@ import Home from './components/common/Home'
 import Navbar from './components/common/Navbar'
 import ErrorPage from './components/common/Error'
 import SecureRoute from './components/common/SecureRoute'
-// import FilmIndex from './components/films/FilmIndex'
-// import FilmShow from './components/films/FilmShow'
-// import FilmNew from './components/films/FilmNew'
-// import FilmEdit from './components/films/FilmEdit'
+import Profile from './components/common/Profile'
+import PokemonEdit from './components/pokemon/PokemonEdit'
 import Register from './components/auth/Register'
 import Login from './components/auth/Login'
 import PokemonIndex from './components/pokemon/PokemonIndex'
@@ -107,6 +105,8 @@ const App = () => (
         <SecureRoute path="/films/new" component={FilmNew} />
         <Route path="/films/:id" component={FilmShow} />
         <Route path="/films" component={FilmIndex} /> */}
+        <SecureRoute path="/profile" component={Profile} />
+        <SecureRoute path="/pokemons/:id/edit" component={PokemonEdit} />
         <SecureRoute path="/pokemons/new" component={PokemonNew} />
         <Route path="/battleroyale" component={BattleRoyale} />
         <Route path="/pokemons/:id" component={PokemonShow} />

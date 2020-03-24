@@ -1,39 +1,41 @@
 import React from 'react'
 import axios from 'axios'
-import FilmCard from './FilmCard'
+import Auth from '../../lib/auth'
+import PokemonCard from './../pokemon/PokemonCard'
 class Profile extends React.Component {
   state = {
-    likedFilms: [],
-    createdFilms: [],
+    createdPokemons: [],
     username: ''
   }
 
   async componentDidMount() {
     try {
-      const res = await axios.get('/api/profile')
-      this.setState({ createdFilms: res.data.createdFilms })
-      this.setState({ likedFilms: res.data.likedFilms })
-      this.setState({ username: res.data.username })
+      // const res = await axios.get('/api/profile')
+      const userId = Auth.getPayload().sub
+      const res = await axios.get('api/pokemons/')
+      console.log('userId =', userId)
+      console.log('res =', res.data)
+      const createdPokemons = res.data.filter((pokemon) => pokemon.owner.id === userId)
+      console.log('createdPokemons', createdPokemons)
+
+      this.setState({ createdPokemons })
+      // this.setState({ username: res.data.username })
     } catch (err) {
       console.log(err)
     }
   }
+
+
   render() {
     console.log('Profile returned!')
     return (
       <section className="section">
-        <h1>Profile of {this.state.username}</h1>
+        {/* <h1>Profile of {this.state.username}</h1> */}
         <div className="container">
-          <h2>Created Films</h2>
+          <h1 className="title">Your Created Pokemon</h1>
           <div className="columns is-mobile is-multiline">
-            {this.state.createdFilms.map(film => (
-              <FilmCard key={film._id} {...film} />
-            ))}
-          </div>
-          <h2>Liked Films</h2>
-          <div className="columns is-mobile is-multiline">
-            {this.state.likedFilms.map(film => (
-              <FilmCard key={film._id} {...film} />
+            {this.state.createdPokemons.map(pokemon => (
+              <PokemonCard key={pokemon._id} {...pokemon} />
             ))}
           </div>
         </div>
