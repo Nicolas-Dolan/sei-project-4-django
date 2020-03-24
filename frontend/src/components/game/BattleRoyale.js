@@ -1,14 +1,15 @@
 import React from 'react'
 import axios from 'axios'
 import ViewCard from './ViewCard'
+// import thatpokemon from './../../assets/thatpokemon.png'
 import DetailsCard from './DetailsCard'
 // import bulbback from './../../assets/1/back.gif'
 class BattleRoyale extends React.Component {
   state = {
     allPokemon: [],
     detailsView: { 
-      name: 'Who\'s that pokemon?',
-  frontImg: 'https://famequiz.com/wp-content/uploads/2019/09/Screenshot_1.png',
+      name: 'Who\'s that pokémon?',
+  frontImg: 'https://res.cloudinary.com/db8ricdjk/image/upload/v1585082165/pokemon-unlimited-admin/thatpokemon.png',
 hp: '???',
 attack: '???',
 defence: '???',
@@ -1509,7 +1510,7 @@ speed: '???',
         <section>
         {/* <input type="text" id="one" onKeyDown={this.handleKeyDown} /> */}
         {gridBuilt ? '' : <button onClick={this.buildGame}>Build Game</button>}
-        {pokemonDeployed ? '' : <button onClick={this.deployPokemon}>Deploy Pokemon</button>}
+        {pokemonDeployed ? '' : <button onClick={this.deployPokemon}>Deploy Pokémon</button>}
         {(gameActive || !gridBuilt || !pokemonDeployed) ? '' : <button onClick={this.activatePokemon}>Start Game</button>}
         {(gameActive && pokemonDeployed) ? <button onClick={this.pauseGame}>Stop Game</button> : ''}
         {(!gameActive && pokemonDeployed) ? <button onClick={this.resetGame}>Reset Game</button> : ''}
@@ -1546,8 +1547,8 @@ speed: '???',
       
         <section className="centerIt">
         <div>
-        <h2>Select Pokemon</h2>
-        <button onClick={this.addAllPokemon}>Add All Pokemon</button>
+        <h2>Select Pokémon</h2>
+        <button onClick={this.addAllPokemon}>Add All Pokémon</button>
           <div className="scrollBox" style={{ height: '560px' }}>
             {allPokemon.sort(function(a, b) {
     return a.dexNum - b.dexNum;

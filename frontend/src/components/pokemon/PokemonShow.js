@@ -94,21 +94,27 @@ class PokemonShow extends React.Component {
     return (
       <section className="section">
         <div className="container">
-          <h2 className="title">{pokemon.name}</h2>
+          <div style={{display: 'flex', justifyContent: 'space-between'}}>
+          <h2 className="title" style={{ textTransform: 'capitalize' }}>{pokemon.name}</h2>
+          <h4 className="title is-4">Pokédex No: {pokemon.dexNum}</h4>
+          </div>
+          
           <hr />
           <div className="columns">
             <div className="column is-half">
               <figure className="image">
-                <img src={pokemon.frontImg} alt={pokemon.name} />
+                <img style={{height: '200px', width: 'auto', display: 'block'}} src={pokemon.frontImg} alt={pokemon.name} />
               </figure>
+              <hr />
+              <h4 className="title is-4">Description</h4>
+              <p>{pokemon.description}</p>
+              <hr />
               <p>Created by: {pokemon.owner.username}</p>
             </div>
             <div className="column is-half">
-              <h4 className="title is-4">PokeDex Number</h4>
-              <p>{pokemon.dexNum}</p>
-              <hr />
+              
               {/* <div className="card-content"> */}
-        <h4 className="title is-5">Stats</h4>
+        <h4 className="title is-4">Stats</h4>
         <h5 className="title is-6">HP: {pokemon.hp}</h5>
         <h5 className="title is-6">Attack: {pokemon.attack}</h5>
         <h5 className="title is-6">Defence: {pokemon.defence}</h5>
@@ -117,10 +123,10 @@ class PokemonShow extends React.Component {
         <h5 className="title is-6">Speed: {pokemon.speed}</h5>
       {/* </div> */}
       <hr />
-              <h4 className="title is-4">Description</h4>
-              <hr />
-              <p>{pokemon.description}</p>
-              <hr />
+      <h4 className="title is-4">Types</h4>
+      <h5 className="title is-6" style={{ textTransform: 'capitalize' }}>Type 1: {pokemon.type1}</h5>
+      <h5 className="title is-6" style={{ textTransform: 'capitalize' }}>Type 2: {pokemon.type2 === 'null' ? 'None' : pokemon.type2}</h5>
+              {/* <hr /> */}
               {/* <h4 className="title is-4">Comments</h4>
               <hr />
               {pokemon.comments.map(comment => <p key={comment.id} className="padding flex"><span><span className="bold">{comment.user.username}:</span> {comment.text}</span>{this.isOwnerC(comment.user.id) && <button className="button is-danger is-small" onClick={this.handleDeleteC} id={comment.id}>Delete Comment</button>}</p>)} */}
@@ -141,7 +147,7 @@ class PokemonShow extends React.Component {
               <hr /> */}
               
               {/* <div className="flex"><button onClick={this.handleSubmitL} className="button is-success">Like 👍</button><p><span className="bold">Like Count:</span> {pokemon.likes.length}</p></div> */}
-              <hr />
+              {/* <hr /> */}
               {this.isOwner() &&
                 <>
                   <div className="flex">

@@ -32,7 +32,7 @@ class Profile extends React.Component {
       <section className="section">
         {/* <h1>Profile of {this.state.username}</h1> */}
         <div className="container">
-          <h1 className="title">Your Created Pokemon</h1>
+          <h1 className="title">Your Created Pokémon</h1>
           <div className="columns is-mobile is-multiline">
             {this.state.createdPokemons.map(pokemon => (
               <PokemonCard key={pokemon._id} {...pokemon} />

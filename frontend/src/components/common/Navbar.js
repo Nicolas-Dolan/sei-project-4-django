@@ -52,7 +52,7 @@ class Navbar extends React.Component {
       <nav className="navbar is-danger">
         <div className="container">
           <div className="navbar-brand">
-            <Link className="navbar-item" to="/">Pokemon Unlimited</Link>
+            <Link className="navbar-item" to="/">Pokémon Unlimited</Link>
             <a className={`navbar-burger ${navbarOpen ? 'is-active' : ''}`} onClick={this.toggleNavbar}>
               <span></span>
               <span></span>
@@ -63,10 +63,10 @@ class Navbar extends React.Component {
             <div className="navbar-end">
               <Link className="navbar-item" to="/battleroyale">Battle Royale</Link>
               {/* <Link className="navbar-item" to="/seeds">Generate Seeds</Link> */}
-              <Link className="navbar-item" to="/pokemons">PokeDex</Link>
+              <Link className="navbar-item" to="/pokemons">Pokédex</Link>
               {!Auth.isAuthenticated() && <Link className="navbar-item" to="/register">Register</Link>}
               {!Auth.isAuthenticated() && <Link className="navbar-item" to="/login">Login</Link>}
-              {Auth.isAuthenticated() && <Link className="navbar-item" to="/pokemons/new">Create Pokemon</Link>}
+              {Auth.isAuthenticated() && <Link className="navbar-item" to="/pokemons/new">Create Pokémon</Link>}
               {Auth.isAuthenticated() && <Link className="navbar-item" to="/profile">Profile</Link>}
               {Auth.isAuthenticated() && <a onClick={this.handleLogout} className="navbar-item">Logout {this.state.username}</a>}
             </div>

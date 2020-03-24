@@ -2,15 +2,15 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 // const PokemonCard = ({ stats: { name, id, sprites, height, stats, types }, species: { shape, flavor_text_entries } }) => (
   const PokemonCard = ({id, name, frontImg, backImg, hp, attack, defence, spAt, spDf, speed, type1, type2, height, shape, description}) => (
-  <div key={id} className="column is-one-third-desktop is-one-third-tablet is-half-mobile">
+  <div key={id} className="column is-one-fifth-desktop is-one-third-tablet is-half-mobile">
     <Link to={`/pokemons/${id}/`}>
     <div className="card">
       <div className="card-header">
-        <h4 className="card-header-title">{name}</h4>
+        <h4 className="card-header-title" style={{ textTransform: 'capitalize' }}>{name}</h4>
       </div>
       <div className="card-image">
         <figure className="image">
-          <img src={frontImg} alt={name} />
+          <img style={{height: '100px', width: 'auto', display: 'block'}} src={frontImg} alt={name} />
         </figure>
       </div>
       {/* <div className="card-content">
@@ -38,10 +38,10 @@ import { Link } from 'react-router-dom'
         <h5 className="title is-6">Height: {height}</h5>
         <h5 className="title is-6">Shape: {shape}</h5>
       </div> */}
-      <div className="card-content">
+      {/* <div className="card-content">
         <h4 className="title is-5">Description</h4>
         <p>{description}</p>
-      </div>
+      </div> */}
     </div>
     </Link>
   </div>

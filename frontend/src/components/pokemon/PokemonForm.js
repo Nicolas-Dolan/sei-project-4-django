@@ -20,9 +20,9 @@ const PokemonForm = ({  formData, handleChange, handleSubmit, handleMultiChange,
   return (
     <div className="columns">
       <form onSubmit={handleSubmit} className="column is-half is-offset-one-quarter">
-        <h2 className="title">Create a Pokemon</h2>
+        <h2 className="title">Create a Pokémon</h2>
         <div className="field">
-          <label className="label">Pokemon Name</label>
+          <label className="label">Pokémon Name</label>
           <div className="control">
             <input 
               className="input"
@@ -35,7 +35,7 @@ const PokemonForm = ({  formData, handleChange, handleSubmit, handleMultiChange,
         </div>
 
         <div className="field">
-          <label className="label">PokeDex Number</label>
+          <label className="label">Pokédex Number</label>
           <div className="control">
             <input 
               className="input"
@@ -48,7 +48,7 @@ const PokemonForm = ({  formData, handleChange, handleSubmit, handleMultiChange,
         </div>
 
         <div className="field">
-              <label className="label">Front Portrait of Pokemon</label>
+              <label className="label">Front Portrait of Pokémon</label>
               <div className="control">
                 <ImageUpload 
                   labelText="Front Image"
@@ -61,7 +61,7 @@ const PokemonForm = ({  formData, handleChange, handleSubmit, handleMultiChange,
             </div>
 
             <div className="field">
-              <label className="label">Back Portrait of Pokemon</label>
+              <label className="label">Back Portrait of Pokémon</label>
               <div className="control">
                 <ImageUpload 
                   labelText="Back Image"
@@ -428,7 +428,7 @@ const PokemonForm = ({  formData, handleChange, handleSubmit, handleMultiChange,
             </div>
 
             <div className="field">
-              <label className="label">PokeDex Description</label>
+              <label className="label">Pokédex Description</label>
               <div className="control">
                 <textarea 
                   className="textarea"
@@ -454,7 +454,7 @@ const PokemonForm = ({  formData, handleChange, handleSubmit, handleMultiChange,
         </div> */}
        
         <div className="field">
-          <button type="submit" className="button is-fullwidth is-warning">Create Pokemon</button>
+          <button type="submit" className="button is-fullwidth is-warning">Create Pokémon</button>
         </div>
       </form>
     </div>
