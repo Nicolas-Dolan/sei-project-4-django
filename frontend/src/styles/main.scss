@@ -208,4 +208,17 @@ div.scrollBox {
                           overflow-y: auto;
 }
 
-select#shape option[value="ball"]   { background-image: url(./../assets/shapes/ball.png)}
+// select#shape option[value="ball"]   { background-image: url(./../assets/shapes/ball.png)}
+
+.altHomePage {
+  display: none;
+}
+
+@media only screen and (max-width: 420px) {
+  .homePage {
+    display: none;
+  }
+  .altHomePage {
+    display: flex;
+  }
+}

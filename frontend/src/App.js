@@ -45,6 +45,7 @@ import SeedGenerator from './components/pokemon/SeedGenerator'
 import BattleRoyale from './components/game/BattleRoyale'
 import PokemonShow from './components/pokemon/PokemonShow'
 import PokemonNew from './components/pokemon/PokemonNew'
+import MobileDevice from './components/common/MobileDevice'
 
 // const App = () => (
 //   <BrowserRouter>
@@ -98,6 +99,10 @@ import PokemonNew from './components/pokemon/PokemonNew'
 const App = () => (
   <BrowserRouter>
     <main>
+      <div className="altHomePage">
+        <MobileDevice />
+      </div>
+      <div className="homePage">
       <Navbar />
       <Switch>
         <Route exact path="/" component={Home} />
@@ -116,6 +121,7 @@ const App = () => (
         <Route path="/login" component={Login} />
         <Route path="/*" component={ErrorPage} /> 
       </Switch>
+      </div>
     </main>
   </BrowserRouter>
 )

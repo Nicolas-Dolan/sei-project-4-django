@@ -28,15 +28,19 @@ class Profile extends React.Component {
 
   render() {
     console.log('Profile returned!')
+    const { createdPokemons } = this.state
     return (
       <section className="section">
         {/* <h1>Profile of {this.state.username}</h1> */}
         <div className="container">
           <h1 className="title">Your Created Pokémon</h1>
           <div className="columns is-mobile is-multiline">
-            {this.state.createdPokemons.map(pokemon => (
+            {createdPokemons.length >= 1 ? this.state.createdPokemons.map(pokemon => (
               <PokemonCard key={pokemon._id} {...pokemon} />
-            ))}
+            )) : <p style={{ margin: '0 14px'}}>You have not created any pokemon yet</p>}
+            {/* {this.state.createdPokemons.map(pokemon => (
+              <PokemonCard key={pokemon._id} {...pokemon} />
+            ))} */}
           </div>
         </div>
       </section>
