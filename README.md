@@ -24,7 +24,7 @@ To create a full-stack Restful application that uses React in the frontend and D
 1 week
 
 ### Technologies used
-JavaScript, React, Python, Django, PostgreSQL, Axios, Scss, Bulma, Google Fonts, Git, Yarn, GitHub, PokéApi, Cloudinary, Insomnia.
+JavaScript, React, Python, Django, PostgreSQL, Axios, Sass, Bulma, Google Fonts, Git, Yarn, GitHub, PokéApi, Cloudinary, Insomnia.
 
 ## Instructions
 1. To get the most out of this application, you will need to make an account. This will allow you to use all the features of this Restful application such as creating and editing Pokémon. To do this, navigate to the Register page and add your details. You will then be prompted to log in.
@@ -63,7 +63,7 @@ I created the backend database using a Python-based framework called Django and 
 
 ### Frontend web application
 
-I created the frontend using React. I seperated the app into  components to help keep things organised. Requests to the database were made using Axios. I styled the application using Scss and Bulma. I stored the website images in the assets folder but used Cloudinary to store images from the database.
+I created the frontend using React. I seperated the app into  components to help keep things organised. Requests to the database were made using Axios. I styled the application using Sass and Bulma. I stored the website images in the assets folder but used Cloudinary to store images from the database.
 
 ### Game logic
 
@@ -87,6 +87,7 @@ I was very please to get everything working with no bugs (that I have observed).
 - Generally cleaning up and commenting the code more
 - Full user profiles with profile images, bio, etc
 - Allow users to add other user's Pokémon to their collections
+- Add more Pokémon to the database seed
 - Show back sprites on mouse over of Pokémon's image
 - Show stats of Pokémon on mouse over in Battle Royale
 - Improved visuals and more features in the Battle Royale game:
