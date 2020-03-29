@@ -105,3 +105,22 @@ I was very please to get everything working with no bugs (that I have observed).
 ## Key learnings
 
 I learned a lot about using Python in the backend and became even more comfortable with React. I made a big effort to avoid repeating code and I think that approach really paid off, allowing me to make a very complicated game that has concise, easy-to-read code with no discernable bugs. I also learned the value of objects in JS, which, to my detriment, I neglected to use in the my first grid-base game in project 1.
+
+One thing that was particularily improved on from my first project was how characters handled decisions. In project 1, I used enormous, difficult-to-manage decision trees to determine how a character would behave in given situations. For project 4, I had the idea to use a numerical weighting system for decisions rather than hardcoding everything. This made the code a lot easier to tweak and allowed me to handle a lot more variables in a decision process. Here is a snippet of the code: 
+
+```javascript
+if (tarRelPos[0] === 'left') {
+        left += 10
+        if (tarRelPos[2] > tarRelPos[3]){
+          left += 5
+        }
+      } else if (tarRelPos[0] === 'right') {
+        right += 10
+        if (tarRelPos[2] > tarRelPos[3]){
+          right += 5
+        }
+      } else if (tarRelPos[0] === 'same') {
+        right += 5
+        left += 5
+      }
+```
