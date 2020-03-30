@@ -1,8 +1,8 @@
 # Pokémon Unlimited
 
-![ga](frontend/src/assets/screenshots/ga.png)
+<!-- ![ga](frontend/src/assets/screenshots/ga.png) -->
 
-## General Assembly: Software Engineering Immersive - Project 4
+## ![](https://ga-dash.s3.amazonaws.com/production/assets/logo-9f88ae6c9c3871690e33280fcf557f33.png) General Assembly: Software Engineering Immersive - Project 4
 
 [Click here to open the application on Heroku](https://pokemon-unlimited.herokuapp.com/)
 
