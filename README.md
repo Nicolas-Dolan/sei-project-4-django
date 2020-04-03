@@ -61,13 +61,131 @@ Implementing these three features within a 1 week timeframe was very ambitious a
 
 I created the backend database using a Python-based framework called Django and managed it with PostgreSQL. It contains two models: one for users and the other for Pokémon. I wanted users to be able to create and edit their own Pokémon so each Pokémon has a user as its owner. I generated the seed file by making Axios requests to [PokéApi](https://pokeapi.co/) for the data I needed. This was actually done at the frontend but users of the application do not have access to this feature. The code is, however, still acessible on GitHub and I can use it to quickly generate additional seeds in future as doing this manually would be very time consuming.
 
+```javascript
+async componentDidMount() {
+    let i = 1
+    for (i = 141; i <= 151; i++) {
+      try {
+        const res = await axios.get(`https://pokeapi.co/api/v2/pokemon/${i}/`)
+        const res2 = await axios.get(`https://pokeapi.co/api/v2/pokemon-species/${i}/`)
+        this.setState({ pokemons: [...this.state.pokemons, { stats: res.data, species: res2.data } ] })
+      } catch (err) {
+        console.log(err)
+      }
+    }
+  }
+
+  <div key={id}>
+    <p>
+
+      {`{
+        "model": "pokemons.pokemon",
+        "pk": ${id},
+        "fields": {
+        "name": "${name}",
+        "dexNum": ${id},
+        "frontImg": "http://www.pokestadium.com/sprites/black-white/animated/${name}.gif",
+        "backImg": "http://www.pokestadium.com/sprites/black-white/animated/back/${name}.gif",
+        "hp": ${stats[5].base_stat},
+        "attack": ${stats[4].base_stat},
+        "defence": ${stats[3].base_stat},
+        "spAt": ${stats[2].base_stat},
+        "spDf": ${stats[1].base_stat},
+        "speed": ${stats[0].base_stat},
+        "type1": "${types[0].type.name}",
+        "type2": "${types[1] ? types[1].type.name : null }",
+        "shape": "${shape.name}",
+        "height": ${height},
+        "eggGroup": "${egg_groups[0].name}",
+        "isBaby": ${is_baby},
+        "generation": "${generation.name}",
+        "owner": 1,
+        "description": "${flavor_text_entries.reduce((acc, entry, i) => {
+    if (entry.language.name === 'en' && i < 4) {
+      acc = entry.flavor_text
+    }
+    return acc
+  }
+  )}"
+}
+      },`}
+    </p>
+  </div>
+
+```
+
 ### Frontend web application
 
 I created the frontend using React. I seperated the app into  components to help keep things organised. Requests to the database were made using Axios. I styled the application using Sass and Bulma. I stored the website images in the assets folder but used Cloudinary to store images from the database.
 
 ### Game logic
 
-The game logic was the most challenging but rewarding aspect of this application. For the Pokémon to be able to fight in this grid-based game, they needed to be able to be aware of the space they occupied and the space occupied by other Pokémon, detect other Pokémon, choose a target, path-find towards them, attack, calculate damage, and be aware of when they had lost all of their health so that they could remove themselves from the game. I also needed to develop systems for staging and deploying Pokémon from the database into the game. All of this together results in a game that looks very simple but beneath is extremely complicated. To help manage complexity I created this entire aspect of the application in a single component.
+The game logic was the most challenging but rewarding aspect of this application. For the Pokémon to be able to fight in this grid-based game, they needed to be able to be aware of the space they occupied and the space occupied by other Pokémon, detect other Pokémon, choose a target, path-find towards them, attack, calculate damage, and be aware of when they had lost all of their health so that they could remove themselves from the game. I also needed to develop systems for staging and deploying Pokémon from the database into the game. 
+
+```javascript
+
+portPokemon(staged, deployed){
+    Object.keys(staged).map(key => {
+      const _id = key
+      deployed[_id] = {...key}
+    })
+  }
+
+  deployPokemon = () => {
+    const { deployed, staged, benched, grid, width } = this.state
+    Object.keys(staged).map(key => {
+
+      deployed[key] = {...this.state.staged[key]}
+    })
+    Object.keys(deployed).map(pokemon => {
+      const pokeHeight = deployed[pokemon].pokeHeight
+      let success = false
+      let i = 0
+      while (i < 10 && success === false) {
+        i++
+        const possibleIndex = Math.floor(Math.random() * (grid.length - width))
+        const farIndex = possibleIndex + ((pokeHeight - 1) + ((pokeHeight - 1) * width))
+        const self = []
+        this.pushBlock(possibleIndex, farIndex, self)
+
+        if ((possibleIndex) % width < width - pokeHeight - 1) {
+          if ((possibleIndex + 1) + (width * (pokeHeight + 1)) < width * width){
+            if (this.checkMove(grid, self, 'pokemon', deployed[pokemon]._id)){
+              grid[possibleIndex].push('pokeIndex')
+              this.paintBlock(possibleIndex, farIndex, 'pokemon', grid)
+              this.paintBlock(possibleIndex, farIndex, deployed[pokemon]._id, grid)
+              deployed[pokemon].pokeIndex = possibleIndex
+              deployed[pokemon].farIndex = farIndex
+              deployed[pokemon].target = ['id placeholder', 'index placeholder', 'closeness placeholder']
+              deployed[pokemon].pokeTimer = 'placeholder'
+              deployed[pokemon].direction = this.randomDirection()
+              deployed[pokemon].attackCounter = 0
+              deployed[pokemon].currentHealth = deployed[pokemon].hp
+              deployed[pokemon].previousHealth = deployed[pokemon].hp
+              deployed[pokemon].damageReceived = 'none'
+              success = true
+            }
+          }
+        } 
+      }
+      if (!success){
+        benched[pokemon] = deployed[pokemon]
+        console.log(deployed[pokemon].name, 'was benched')
+        delete deployed[pokemon]
+      }
+    })
+    this.setState({
+      deployed,
+      staged,
+      benched,
+      grid,
+      pokemonDeployed: true
+    })
+  }
+
+```
+
+All of this together results in a game that looks very simple but beneath is extremely complicated. To help manage complexity I created this entire aspect of the application in a single component.
 
 ## Challenges
 
