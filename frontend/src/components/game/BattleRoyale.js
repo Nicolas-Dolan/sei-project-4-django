@@ -224,7 +224,7 @@ speed: '???',
               deployed[pokemon].target = ['id placeholder', 'index placeholder', 'closeness placeholder']
               deployed[pokemon].pokeTimer = 'placeholder'
               deployed[pokemon].direction = this.randomDirection()
-              deployed[pokemon].attackCounter = 0
+              deployed[pokemon].attackCounter = 2
               deployed[pokemon].currentHealth = deployed[pokemon].hp
               deployed[pokemon].previousHealth = deployed[pokemon].hp
               deployed[pokemon].damageReceived = 'none'
