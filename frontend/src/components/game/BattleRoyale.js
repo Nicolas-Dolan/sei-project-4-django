@@ -82,12 +82,19 @@ speed: '???',
 
   componentWillUnmount() {
     clearInterval(this.myInterval)
-    const { deployed } = this.state
+    const { deployed, attacks } = this.state
 
     Object.keys(deployed).map(_id => {
       clearInterval(deployed[_id].pokeTimer)
     })
-    this.setState({ deployed })
+
+    Object.keys(attacks).map(attId => {
+      clearInterval(attacks[attId].attackTimer)
+    })
+    this.setState({ 
+      deployed,
+      attacks
+     })
     console.log('component will unmount')
   }
 
@@ -112,13 +119,17 @@ speed: '???',
   }
 
   pauseGame = () => {
-    const { deployed } = this.state
+    const { deployed, attacks } = this.state
 
     Object.keys(deployed).map(_id => {
       clearInterval(deployed[_id].pokeTimer)
     })
+    Object.keys(attacks).map(attId => {
+      clearInterval(attacks[attId].attackTimer)
+    })
     this.setState({ 
       deployed,
+      attacks,
       gameActive: false
      })
 
@@ -404,15 +415,120 @@ speed: '???',
       // console.log(pokemon.name, 'did', this.damageCalculator(attack, defence, attType, defTyp1, defTyp2), 'physical', attType, 'damage against', deployed[target[0]].name, tarRelPos[0], tarRelPos[1])
     // }
     //! the below code is for ranged attacks which has been commented out for the time being
-    // } else if (attackCounter > 3) {
-    //   const attId = 'attId_' + Math.floor(Math.random() * 100000000)
-    //   attacks = { ...attacks, [attId]: { 'attType': attType, 'attId': attId, 'ownerId': _id, 'targetIndex': target[1], 'power': spAt, 'attIndex': attOrigin } }
-    //   grid[attOrigin].push('attack')
-    //   grid[attOrigin].push(attId)
-    //   grid[attOrigin].push(attType)
-    //   deployed[_id].attackCounter = 0
+    } else if (attackCounter > 3) {
+      const attId = 'attId_' + Math.floor(Math.random() * 100000000)
+      attacks = { ...attacks, [attId]: { 'attType': attType, 'attId': attId, 'ownerId': _id, 'targetIndex': target[1], 'power': spAt, 'attIndex': attOrigin } }
+      grid[attOrigin].push('attack')
+      grid[attOrigin].push(attId)
+      grid[attOrigin].push(attType)
+      deployed[_id].attackCounter = 0
+      
+      this.attackTimer = setInterval(() => {
+        this.moveAttack(attId)
+      }, 25)  
+      attacks[attId].attackTimer = this.attackTimer
     }
     this.setState({ deployed, attacks, grid })
+    // console.log(this.state.attacks)
+  }
+
+  moveAttack(attId) {
+    const { width } = this.state
+    const { attIndex, targetIndex, attType, ownerId} = this.state.attacks[attId]
+    let { attacks, grid, deployed } = this.state
+    const oldIndex = this.state.attacks[attId].attIndex
+
+    if (grid[attIndex].includes('pokemon') && !grid[attIndex].includes(ownerId)) {
+      // console.log('hit')
+      grid[oldIndex].splice(grid[oldIndex].indexOf('attack'), 1)
+    grid[oldIndex].splice(grid[oldIndex].indexOf(attId), 1)
+    grid[oldIndex].splice(grid[oldIndex].indexOf(attType), 1)
+
+    const hitId = grid[oldIndex].filter(item => item.startsWith('id_'))
+      // console.log(hitId, grid[oldIndex])
+
+      const { spDf, type1, type2, name } = deployed[hitId]
+      const { power } = attacks[attId]
+
+    deployed[hitId].previousHealth = deployed[hitId].currentHealth
+      deployed[hitId].currentHealth = deployed[hitId].currentHealth - this.damageCalculator(power, spDf, attType, type1, type2)
+      deployed[hitId].damageReceived = attType
+
+      // console.log(name, 'received', this.damageCalculator(power, spDf, attType, type1, type2), attType, 'damage')
+      // console.log(deployed[hitId].previousHealth, deployed[hitId].currentHealth, deployed[hitId].damageReceived, power, spDf, attType, type1, type2)
+
+    clearInterval(attacks[attId].attackTimer)
+    } else if (attIndex === targetIndex) {
+      // console.log('miss')
+      grid[oldIndex].splice(grid[oldIndex].indexOf('attack'), 1)
+    grid[oldIndex].splice(grid[oldIndex].indexOf(attId), 1)
+    grid[oldIndex].splice(grid[oldIndex].indexOf(attType), 1)
+    clearInterval(attacks[attId].attackTimer)
+    } else {
+      const ownRow = Math.ceil((attIndex + 1) / width)
+      const ownColumn = width - (((width * width) - (attIndex + 1)) % width)
+      const targetRow = Math.ceil((targetIndex + 1) / width)
+      const targetColumn = width - (((width * width) - (targetIndex + 1)) % width)
+  
+      let xaxis = ''
+      let yaxis = ''
+      if (ownRow < targetRow) {
+        yaxis = 'below'
+      } else if ( ownRow > targetRow) {
+        yaxis = 'above'
+      } else yaxis = 'same'
+  
+      if (ownColumn < targetColumn) {
+        xaxis = 'right'
+      } else if ( ownColumn > targetColumn) {
+        xaxis = 'left'
+      } else xaxis = 'same'
+  
+      const xdistance = Math.abs(ownColumn - targetColumn)
+      const ydistance = Math.abs(ownRow - targetRow)
+      let finalDir = ''
+      const randomDir = Math.floor(Math.random() * 2) + 1
+  
+      if (xdistance > ydistance){
+        finalDir = xaxis
+      } else if (ydistance > xdistance) {
+        finalDir = yaxis
+      } else if (randomDir === 1) {
+        finalDir = xaxis
+      } else finalDir = yaxis
+  
+      // console.log(attType, finalDir)
+  
+      
+  
+      if (finalDir === 'right') {
+        attacks[attId].attIndex++
+      } else if (finalDir === 'left') {
+        attacks[attId].attIndex--
+      } else if (finalDir === 'above') {
+        attacks[attId].attIndex -= width
+      } else if (finalDir === 'below') {
+        attacks[attId].attIndex += width
+      }
+
+      const newIndex = attacks[attId].attIndex
+  
+      grid[oldIndex].splice(grid[oldIndex].indexOf('attack'), 1)
+      grid[oldIndex].splice(grid[oldIndex].indexOf(attId), 1)
+      grid[oldIndex].splice(grid[oldIndex].indexOf(attType), 1)
+  
+        grid[newIndex].push('attack')
+        grid[newIndex].push(attId)
+        grid[newIndex].push(attType)
+  
+        // console.log(newIndex)
+    }
+
+      this.setState({
+        grid,
+        attacks,
+        deployed
+      })
   }
 
   damageCalculator(attack, defence, attType, defTyp1, defTyp2){
