@@ -415,7 +415,7 @@ speed: '???',
       // console.log(pokemon.name, 'did', this.damageCalculator(attack, defence, attType, defTyp1, defTyp2), 'physical', attType, 'damage against', deployed[target[0]].name, tarRelPos[0], tarRelPos[1])
     // }
     //! the below code is for ranged attacks which has been commented out for the time being
-    } else if (attackCounter > 3) {
+    } else if (attackCounter > 5) {
       const attId = 'attId_' + Math.floor(Math.random() * 100000000)
       attacks = { ...attacks, [attId]: { 'attType': attType, 'attId': attId, 'ownerId': _id, 'targetIndex': target[1], 'power': spAt, 'attIndex': attOrigin } }
       grid[attOrigin].push('attack')
@@ -532,7 +532,7 @@ speed: '???',
   }
 
   damageCalculator(attack, defence, attType, defTyp1, defTyp2){
-    return Math.round(((((((2 * 50) / 5) + 2) * 80 * (attack / defence)) / 50) + 2) * this.effectiveness[attType][defTyp1] * this.effectiveness[attType][defTyp2])
+    return Math.round(((((((2 * 50) / 5) + 2) * 40 * (attack / defence)) / 50) + 2) * this.effectiveness[attType][defTyp1] * this.effectiveness[attType][defTyp2])
   }
 
   movePokemon(grid, pokemon, target, tarRelPos){
@@ -544,6 +544,8 @@ speed: '???',
     // charge(grid, pokemon, target){
     const { width } = this.state
     const { pokeIndex, pokeHeight, _id, direction } = pokemon
+    const far = 10
+    const near = 5
     // const tarRelPos = this.targetRelPos(grid, pokemon, target)
 
     // console.log('tarRelPos =', tarRelPos)
@@ -563,7 +565,7 @@ speed: '???',
     let left = 0
 
     //! the below code gets attack-favouring pokemon to charge: condition is commented out for now
-    // if (pokemon.attack > pokemon.spAt){
+    if (pokemon.attack > pokemon.spAt){
       if (tarRelPos[0] === 'left') {
         left += 10
         if (tarRelPos[2] > tarRelPos[3]){
@@ -593,7 +595,45 @@ speed: '???',
         up += 5
         down += 5
       }
-    // }
+    } else if (pokemon.attack <= pokemon.spAt) {
+      if (tarRelPos[0] === 'left') {
+        if (tarRelPos[2] >= far){
+          left += 10
+        }
+        if (tarRelPos[2] <= near){
+          left -= 10
+        }
+      } else if (tarRelPos[0] === 'right') {
+        if (tarRelPos[2] >= far){
+          right += 10
+        }
+        if (tarRelPos[2] <= near){
+          right -= 10
+        }
+      } else if (tarRelPos[0] === 'same') {
+        right += 5
+        left += 5
+      }
+
+      if (tarRelPos[1] === 'above') {
+        if (tarRelPos[3] >= far){
+          up += 10
+        }
+        if (tarRelPos[3] <= near){
+          up -= 10
+        }
+      } else if (tarRelPos[1] === 'below') {
+        if (tarRelPos[3] >= far){
+          down += 10
+        }
+        if (tarRelPos[3] <= near){
+          down -= 10
+        }
+      } else if (tarRelPos[1] === 'same') {
+        up += 5
+        down += 5
+      }
+    }
   
     if (direction === 'up') {
       up += 0.5
