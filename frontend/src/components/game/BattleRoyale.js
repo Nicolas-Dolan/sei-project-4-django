@@ -50,6 +50,7 @@ speed: '???',
     deployed: {},
     benched: {},
     attacks: {},
+    showHealth: true,
     testmon: { name: 'venusaur', _id: '111', id: '3', frontImg: './../assets/4/front.gif', backImg: './../assets/4/back.gif', hp: 80, attack: 82, defence: 83, spAt: 100, spDf: 100, speed: 80, type1: 'poison', type2: 'grass', shape: 'quadruped', height: 6, description: ',There is a large flower on Venusaur’s back. The flower is said to take on vivid colors if it gets plenty of nutrition and sunlight. The flower’s aroma soothes the emotions of people.,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,' }
 
     // gameActive: false
@@ -966,6 +967,25 @@ speed: '???',
     // I might need to push another className down alongside the index to indicate direction
   }
 
+  findHealth(item){
+    const currentHealth = this.findPokeProp(item, 'currentHealth')
+    const hp = this.findPokeProp(item, 'hp')
+    const percentageHealth = (currentHealth / hp) * 100
+    if (currentHealth <= 17) {
+      return 'https://res.cloudinary.com/db8ricdjk/image/upload/v1586193014/pokemon-unlimited-admin/healthbars/hp17.jpg'
+    } else if (percentageHealth <= 33) {
+      return 'https://res.cloudinary.com/db8ricdjk/image/upload/v1586193014/pokemon-unlimited-admin/healthbars/hp33.jpg'
+    } else if (percentageHealth <= 50) {
+      return 'https://res.cloudinary.com/db8ricdjk/image/upload/v1586193014/pokemon-unlimited-admin/healthbars/hp50.jpg'
+    } else if (percentageHealth <= 67) {
+      return 'https://res.cloudinary.com/db8ricdjk/image/upload/v1586193014/pokemon-unlimited-admin/healthbars/hp67.jpg'
+    } else if (percentageHealth <= 83) {
+      return 'https://res.cloudinary.com/db8ricdjk/image/upload/v1586193014/pokemon-unlimited-admin/healthbars/hp83.jpg'
+    } else if (percentageHealth <= 100) {
+      return 'https://res.cloudinary.com/db8ricdjk/image/upload/v1586193014/pokemon-unlimited-admin/healthbars/hp100.jpg'
+    }
+  }
+
   // findImageHeight(item) {
   //   let id = ''
   //   if (item[0]) {
@@ -1652,10 +1672,13 @@ speed: '???',
       })
   }
 
+  toggleHealth = () => {
+    this.setState({ showHealth: !this.state.showHealth})
+  }
 
 
   render() {
-    const { grid, playerIndex, testmon, gameActive, gridBuilt, width, squareHeight, count, allPokemon, detailsView, pokemonDeployed, staged } = this.state
+    const { grid, playerIndex, testmon, gameActive, gridBuilt, width, squareHeight, count, allPokemon, detailsView, pokemonDeployed, staged, showHealth } = this.state
     // if (!grid[0]) return null
     // console.log(grid)
     // console.log(e.keyCode)
@@ -1675,12 +1698,24 @@ speed: '???',
           {grid[0] ?
             <div className="grid" style={{ height: `${width * squareHeight}px`, width: `${width * squareHeight}px`, backgroundImage: 'https://i.redd.it/o8a7u5vl6hb41.png' }}>
               {/* {grid.map((item, i) => <div key={i.toString()} className={item.reduce((a, c) => a + ' ' + c)}>{i.toString()}</div>)} */}
-              {grid.map((item, i) => <div key={i.toString()} style={{ width: `${squareHeight}px`, height: `${squareHeight}px` }} className={item[0] ? item.reduce((a, c) => a + ' ' + c) : ''}>{item.includes('player') ? <img className="playerImage" src={testmon.frontImg} /> : ''}{item.includes('pokeIndex') ? <img className="pokeImage" src={this.findImage(item)} style={{ height: `${this.findPokeProp(item, 'pokeHeight') * squareHeight}px` }}/> : ''}</div>)}
+              {grid.map((item, i) => <div key={i.toString()} style={{ width: `${squareHeight}px`, height: `${squareHeight}px` }} className={item[0] ? item.reduce((a, c) => a + ' ' + c) : ''}>{item.includes('player') ? <img className="playerImage" src={testmon.frontImg} /> : ''}{item.includes('pokeIndex') ? <img className="pokeImage" src={this.findImage(item)} style={{ height: `${this.findPokeProp(item, 'pokeHeight') * squareHeight}px` }}/> : ''}{item.includes('pokeIndex') && showHealth ? <img className="healthbar" src={this.findHealth(item)} style={{ width: `${this.findPokeProp(item, 'pokeHeight') * squareHeight}px`, transform: `translateY(${(this.findPokeProp(item, 'pokeHeight') * squareHeight) + 3}px)`, height: '8px' }}/> : ''}</div>)}
             </div>
             : null
           }
 
         </div>
+        <div className="field">
+              <label className="checkbox label">
+                Show Health Bars
+                <input
+                style={{ margin: '0 5px'}}
+                  name="showHealth"
+                  type="checkbox"
+                  onChange={this.toggleHealth}
+                  checked={showHealth}
+                />  
+              </label>
+            </div>
         </section>
         <section className="centerIt">
         <div>

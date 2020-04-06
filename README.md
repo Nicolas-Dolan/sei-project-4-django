@@ -207,7 +207,8 @@ I was very please to get everything working with no bugs (that I have observed).
 - Allow users to add other user's Pokémon to their collections
 - Add more Pokémon to the database seed
 - Show back sprites on mouse over of Pokémon's image
-- Show stats of Pokémon on mouse over in Battle Royale
+- Show stats of Pokémon on mouse over in Battle Royale and add typing
+- Represent stats with bars
 - Improved visuals and more features in the Battle Royale game:
   - Health bars
   - Sprites change orientation when moving in different directions
