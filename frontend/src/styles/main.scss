@@ -74,6 +74,14 @@ div.pokeIndex {
   // clip: rect(40px,60px,200px,0px);
 }
 
+.leftBack {
+  transform: scaleX(-1)
+}
+
+.rightFront {
+  transform: scaleX(-1)
+}
+
 .pokeImage {
   position: absolute;
   padding: 0;

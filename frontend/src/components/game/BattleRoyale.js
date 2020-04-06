@@ -733,6 +733,7 @@ speed: '???',
       deployed[_id].farIndex += width
     }
     deployed[_id].target = [...target]
+    deployed[_id].lastDirection = this.state.deployed[_id].direction
     deployed[_id].direction = direction
     // console.log('before state', name, _id, pokeIndex)
     grid[oldIndex].splice(grid[oldIndex].indexOf('pokeIndex'), 1)
@@ -747,7 +748,7 @@ speed: '???',
     })
     // console.log('after state', name, _id, this.state.pokeIndex)
     // console.log(this.state)
-    // console.log('post state direction =', this.state.deployed[_id].direction)
+    // console.log('post state direction =', this.state.deployed[_id].direction, this.state.deployed[_id].lastDirection)
   }
 
 
@@ -957,7 +958,31 @@ speed: '???',
   }
 
   findImage(item){
-    return this.findPokeProp(item, 'frontImg')
+    const direction = this.findPokeProp(item, 'direction')
+    const lastDirection = this.findPokeProp(item, 'lastDirection')
+    let imageDirection = ''
+    if (direction === 'right' && lastDirection !== 'up'){
+      imageDirection = 'rightFront' 
+    } else if (direction === 'left' && lastDirection !== 'up'){
+      imageDirection = 'leftFront' 
+    } else if (direction === 'up' && lastDirection !== 'right'){
+      imageDirection = 'leftBack' 
+    } else if (direction === 'up' && lastDirection !== 'left'){
+      imageDirection = 'rightBack' 
+    } else if (direction === 'down' && lastDirection !== 'left'){
+      imageDirection = 'rightFront' 
+    } else if (direction === 'down' && lastDirection !== 'right'){
+      imageDirection = 'leftFront' 
+    } else if (direction === 'left'){
+      imageDirection = 'leftFront' 
+    } else if (direction === 'right'){
+      imageDirection = 'rightFront' 
+    } else imageDirection = 'leftFront' 
+
+    if (imageDirection === 'leftFront' || imageDirection === 'rightFront') {
+      return this.findPokeProp(item, 'frontImg')
+    } else return this.findPokeProp(item, 'backImg')
+
 
     // this will be used by the ternary operator in the render to identify the string beginning with 'id_' in the array 
     // and then use that to find the correct object staged in state and pull its image
@@ -965,6 +990,31 @@ speed: '???',
     // minimum size of pokeGrid will be 3x3
     // eventually it will also need to alternate the image depending on the pokemon's direction
     // I might need to push another className down alongside the index to indicate direction
+  }
+
+  imageDirection(item){
+    const direction = this.findPokeProp(item, 'direction')
+    const lastDirection = this.findPokeProp(item, 'lastDirection')
+    let imageDirection = ''
+    if (direction === 'right' && lastDirection !== 'up'){
+      imageDirection = 'rightFront' 
+    } else if (direction === 'left' && lastDirection !== 'up'){
+      imageDirection = 'leftFront' 
+    } else if (direction === 'up' && lastDirection !== 'right'){
+      imageDirection = 'leftBack' 
+    } else if (direction === 'up' && lastDirection !== 'left'){
+      imageDirection = 'rightBack' 
+    } else if (direction === 'down' && lastDirection !== 'left'){
+      imageDirection = 'rightFront' 
+    } else if (direction === 'down' && lastDirection !== 'right'){
+      imageDirection = 'leftFront' 
+    } else if (direction === 'left'){
+      imageDirection = 'leftFront' 
+    } else if (direction === 'right'){
+      imageDirection = 'rightFront' 
+    } else imageDirection = 'leftFront' 
+
+    return imageDirection
   }
 
   findHealth(item){
@@ -1698,7 +1748,7 @@ speed: '???',
           {grid[0] ?
             <div className="grid" style={{ height: `${width * squareHeight}px`, width: `${width * squareHeight}px`, backgroundImage: 'https://i.redd.it/o8a7u5vl6hb41.png' }}>
               {/* {grid.map((item, i) => <div key={i.toString()} className={item.reduce((a, c) => a + ' ' + c)}>{i.toString()}</div>)} */}
-              {grid.map((item, i) => <div key={i.toString()} style={{ width: `${squareHeight}px`, height: `${squareHeight}px` }} className={item[0] ? item.reduce((a, c) => a + ' ' + c) : ''}>{item.includes('player') ? <img className="playerImage" src={testmon.frontImg} /> : ''}{item.includes('pokeIndex') ? <img className="pokeImage" src={this.findImage(item)} style={{ height: `${this.findPokeProp(item, 'pokeHeight') * squareHeight}px` }}/> : ''}{item.includes('pokeIndex') && showHealth ? <img className="healthbar" src={this.findHealth(item)} style={{ width: `${this.findPokeProp(item, 'pokeHeight') * squareHeight}px`, transform: `translateY(${(this.findPokeProp(item, 'pokeHeight') * squareHeight) + 3}px)`, height: '8px' }}/> : ''}</div>)}
+              {grid.map((item, i) => <div key={i.toString()} style={{ width: `${squareHeight}px`, height: `${squareHeight}px` }} className={item[0] ? item.reduce((a, c) => a + ' ' + c) : ''}>{item.includes('player') ? <img className="playerImage" src={testmon.frontImg} /> : ''}{item.includes('pokeIndex') ? <img className={`pokeImage ${this.imageDirection(item)}`} src={this.findImage(item)} style={{ height: `${this.findPokeProp(item, 'pokeHeight') * squareHeight}px` }}/> : ''}{item.includes('pokeIndex') && showHealth ? <img className="healthbar" src={this.findHealth(item)} style={{ width: `${this.findPokeProp(item, 'pokeHeight') * squareHeight}px`, transform: `translateY(${(this.findPokeProp(item, 'pokeHeight') * squareHeight) + 3}px)`, height: '8px' }}/> : ''}</div>)}
             </div>
             : null
           }
