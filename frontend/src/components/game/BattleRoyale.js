@@ -230,6 +230,7 @@ speed: '???',
               deployed[pokemon].previousHealth = deployed[pokemon].hp
               deployed[pokemon].damageReceived = 'none'
               deployed[pokemon].tarRelPos = ['none', 'none', 0, 0]
+              deployed[pokemon].attacking = false
               success = true
             }
           }
@@ -399,6 +400,7 @@ speed: '???',
     
     attackCounter++
     deployed[_id].attackCounter = attackCounter
+    deployed[_id].attacking = false
 
     let attType = [type1, type2]
     if (attType[1] === 'null'){
@@ -416,6 +418,7 @@ speed: '???',
       deployed[target[0]].damageReceived = attType
       deployed[_id].attackCounter = 0
       deployed[_id].tarRelPos = tarRelPos
+      deployed[_id].attacking = true
       // console.log(pokemon.name, 'did', this.damageCalculator(attack, defence, attType, defTyp1, defTyp2), 'physical', attType, 'damage against', deployed[target[0]].name, tarRelPos[0], tarRelPos[1])
     // }
     //! the below code is for ranged attacks which has been commented out for the time being
@@ -1034,9 +1037,9 @@ speed: '???',
 
     const tarRelPos = this.findPokeProp(item, 'tarRelPos')
     if (tarRelPos[0] === 'left' && tarRelPos[1] === 'above') {
-      return 'leftBack'
+      return 'reverse'
     } else if (tarRelPos[0] === 'right' && (tarRelPos[1] === 'below' || tarRelPos[1] === 'same')) {
-      return 'rightFront'
+      return 'reverse'
     }
   }
 
@@ -1771,7 +1774,10 @@ speed: '???',
           {grid[0] ?
             <div className="grid" style={{ height: `${width * squareHeight}px`, width: `${width * squareHeight}px`, backgroundImage: 'https://i.redd.it/o8a7u5vl6hb41.png' }}>
               {/* {grid.map((item, i) => <div key={i.toString()} className={item.reduce((a, c) => a + ' ' + c)}>{i.toString()}</div>)} */}
-              {grid.map((item, i) => <div key={i.toString()} style={{ width: `${squareHeight}px`, height: `${squareHeight}px` }} className={item[0] ? item.reduce((a, c) => a + ' ' + c) : ''}>{item.includes('player') ? <img className="playerImage" src={testmon.frontImg} /> : ''}{item.includes('pokeIndex') ? <img className={`pokeImage ${this.imageDirection(item)}`} src={this.findImage(item)} style={{ height: `${this.findPokeProp(item, 'pokeHeight') * squareHeight}px` }}/> : ''}{item.includes('pokeIndex') && showHealth ? <img className="healthbar" src={this.findHealth(item)} style={{ width: `${this.findPokeProp(item, 'pokeHeight') * squareHeight}px`, transform: `translateY(${(this.findPokeProp(item, 'pokeHeight') * squareHeight) + 3}px)`, height: '8px' }}/> : ''}</div>)}
+              {/* {grid.map((item, i) => <div key={i.toString()} style={{ width: `${squareHeight}px`, height: `${squareHeight}px` }} className={item[0] ? item.reduce((a, c) => a + ' ' + c) : ''}>{item.includes('player') ? <img className="playerImage" src={testmon.frontImg} /> : ''}{item.includes('pokeIndex') ? <img className={`pokeImage ${this.imageDirection(item)} ${this.findPokeProp(item, 'attacking') ? 'attacking' : ''}`} src={this.findImage(item)} style={{ height: `${this.findPokeProp(item, 'pokeHeight') * squareHeight}px` }}/> : ''}{item.includes('pokeIndex') && showHealth ? <img className="healthbar" src={this.findHealth(item)} style={{ width: `${this.findPokeProp(item, 'pokeHeight') * squareHeight}px`, transform: `translateY(${(this.findPokeProp(item, 'pokeHeight') * squareHeight) + 3}px)`, height: '8px' }}/> : ''}</div>)} */}
+              {/* {grid.map((item, i) => <div key={i.toString()} style={{ width: `${squareHeight}px`, height: `${squareHeight}px` }} className={item[0] ? item.reduce((a, c) => a + ' ' + c) : ''}>{item.includes('player') ? <img className="playerImage" src={testmon.frontImg} /> : ''}{item.includes('pokeIndex') ? <div style={{ width: `${this.findPokeProp(item, 'pokeHeight') * squareHeight + 10}px` }} className={`${this.findPokeProp(item, 'attacking') ? 'attacking' : ''}`}><img className={`pokeImage ${this.imageDirection(item)}`} src={this.findImage(item)} style={{ height: `${this.findPokeProp(item, 'pokeHeight') * squareHeight}px` }}/></div> : ''}{item.includes('pokeIndex') && showHealth ? <img className="healthbar" src={this.findHealth(item)} style={{ width: `${this.findPokeProp(item, 'pokeHeight') * squareHeight}px`, transform: `translateY(${(this.findPokeProp(item, 'pokeHeight') * squareHeight) + 3}px)`, height: '8px' }}/> : ''}</div>)} */}
+              {grid.map((item, i) => <div key={i.toString()} style={{ width: `${squareHeight}px`, height: `${squareHeight}px` }} className={item[0] ? item.reduce((a, c) => a + ' ' + c) : ''}>{item.includes('player') ? <img className="playerImage" src={testmon.frontImg} /> : ''}{item.includes('pokeIndex') ? <div style={{ width: `${this.findPokeProp(item, 'pokeHeight') * squareHeight + 10}px` }} className={`${this.imageDirection(item)}`}><img className={`pokeImage ${this.findPokeProp(item, 'attacking') ? 'attacking' : ''}`} src={this.findImage(item)} style={{ height: `${this.findPokeProp(item, 'pokeHeight') * squareHeight}px` }}/></div> : ''}{item.includes('pokeIndex') && showHealth ? <img className="healthbar" src={this.findHealth(item)} style={{ width: `${this.findPokeProp(item, 'pokeHeight') * squareHeight}px`, transform: `translateY(${(this.findPokeProp(item, 'pokeHeight') * squareHeight) + 3}px)`, height: '8px' }}/> : ''}</div>)}
+
             </div>
             : null
           }
@@ -1832,7 +1838,7 @@ speed: '???',
           <div>
             {/* {detailsView.name !== 'none' ?  */}
               <div>
-               <h3>{detailsView.name}</h3>
+               <h3 style={{ textTransform: 'capitalize' }}>{detailsView.name}</h3>
                <img src={detailsView.frontImg}/>
             <p>HP: {detailsView.hp}</p>
             <p>Attack: {detailsView.attack}</p>
