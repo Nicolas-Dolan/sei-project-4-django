@@ -4,7 +4,7 @@ import React from 'react'
   const ViewCard = ({id, name, frontImg}) => (
   <div key={id} className="viewCard">
       <div>
-        <h4>{name}</h4>
+        <h4 style={{ textTransform: 'capitalize' }}>{name}</h4>
       </div>
       <div>
         <figure>

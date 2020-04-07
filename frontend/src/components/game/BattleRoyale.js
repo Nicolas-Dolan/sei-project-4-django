@@ -229,6 +229,7 @@ speed: '???',
               deployed[pokemon].currentHealth = deployed[pokemon].hp
               deployed[pokemon].previousHealth = deployed[pokemon].hp
               deployed[pokemon].damageReceived = 'none'
+              deployed[pokemon].tarRelPos = ['none', 'none', 0, 0]
               success = true
             }
           }
@@ -361,6 +362,7 @@ speed: '???',
     //     deployed
     //   })
     // }
+    console.log('target rel pos =', this.state.deployed[_id].tarRelPos)
   }
 
   checkForDamage(pokemon, knockout){
@@ -423,6 +425,7 @@ speed: '???',
       grid[attOrigin].push(attId)
       grid[attOrigin].push(attType)
       deployed[_id].attackCounter = 0
+      deployed[_id].tarRelPos = tarRelPos
       
       this.attackTimer = setInterval(() => {
         this.moveAttack(attId)
@@ -958,30 +961,39 @@ speed: '???',
   }
 
   findImage(item){
-    const direction = this.findPokeProp(item, 'direction')
-    const lastDirection = this.findPokeProp(item, 'lastDirection')
-    let imageDirection = ''
-    if (direction === 'right' && lastDirection !== 'up'){
-      imageDirection = 'rightFront' 
-    } else if (direction === 'left' && lastDirection !== 'up'){
-      imageDirection = 'leftFront' 
-    } else if (direction === 'up' && lastDirection !== 'right'){
-      imageDirection = 'leftBack' 
-    } else if (direction === 'up' && lastDirection !== 'left'){
-      imageDirection = 'rightBack' 
-    } else if (direction === 'down' && lastDirection !== 'left'){
-      imageDirection = 'rightFront' 
-    } else if (direction === 'down' && lastDirection !== 'right'){
-      imageDirection = 'leftFront' 
-    } else if (direction === 'left'){
-      imageDirection = 'leftFront' 
-    } else if (direction === 'right'){
-      imageDirection = 'rightFront' 
-    } else imageDirection = 'leftFront' 
+    //! The below commented out code was used when the pokemon would face the direction it was moving in, but now they face their target instead
+    // const direction = this.findPokeProp(item, 'direction')
+    // const lastDirection = this.findPokeProp(item, 'lastDirection')
+    // let imageDirection = ''
+    // if (direction === 'right' && lastDirection !== 'up'){
+    //   imageDirection = 'rightFront' 
+    // } else if (direction === 'left' && lastDirection !== 'up'){
+    //   imageDirection = 'leftFront' 
+    // } else if (direction === 'up' && lastDirection !== 'right'){
+    //   imageDirection = 'leftBack' 
+    // } else if (direction === 'up' && lastDirection !== 'left'){
+    //   imageDirection = 'rightBack' 
+    // } else if (direction === 'down' && lastDirection !== 'left'){
+    //   imageDirection = 'rightFront' 
+    // } else if (direction === 'down' && lastDirection !== 'right'){
+    //   imageDirection = 'leftFront' 
+    // } else if (direction === 'left'){
+    //   imageDirection = 'leftFront' 
+    // } else if (direction === 'right'){
+    //   imageDirection = 'rightFront' 
+    // } else imageDirection = 'leftFront' 
 
-    if (imageDirection === 'leftFront' || imageDirection === 'rightFront') {
-      return this.findPokeProp(item, 'frontImg')
-    } else return this.findPokeProp(item, 'backImg')
+    // if (imageDirection === 'leftFront' || imageDirection === 'rightFront') {
+    //   return this.findPokeProp(item, 'frontImg')
+    // } else return this.findPokeProp(item, 'backImg')
+
+    /////////
+
+    const tarRelPos = this.findPokeProp(item, 'tarRelPos')
+
+    if (tarRelPos[1] === 'above') {
+      return this.findPokeProp(item, 'backImg')
+    } else return this.findPokeProp(item, 'frontImg')
 
 
     // this will be used by the ternary operator in the render to identify the string beginning with 'id_' in the array 
@@ -993,28 +1005,36 @@ speed: '???',
   }
 
   imageDirection(item){
-    const direction = this.findPokeProp(item, 'direction')
-    const lastDirection = this.findPokeProp(item, 'lastDirection')
-    let imageDirection = ''
-    if (direction === 'right' && lastDirection !== 'up'){
-      imageDirection = 'rightFront' 
-    } else if (direction === 'left' && lastDirection !== 'up'){
-      imageDirection = 'leftFront' 
-    } else if (direction === 'up' && lastDirection !== 'right'){
-      imageDirection = 'leftBack' 
-    } else if (direction === 'up' && lastDirection !== 'left'){
-      imageDirection = 'rightBack' 
-    } else if (direction === 'down' && lastDirection !== 'left'){
-      imageDirection = 'rightFront' 
-    } else if (direction === 'down' && lastDirection !== 'right'){
-      imageDirection = 'leftFront' 
-    } else if (direction === 'left'){
-      imageDirection = 'leftFront' 
-    } else if (direction === 'right'){
-      imageDirection = 'rightFront' 
-    } else imageDirection = 'leftFront' 
+    //! The below commented out code was used when the pokemon would face the direction it was moving in, but now they face their target instead
+    // const direction = this.findPokeProp(item, 'direction')
+    // const lastDirection = this.findPokeProp(item, 'lastDirection')
+    // let imageDirection = ''
+    // if (direction === 'right' && lastDirection !== 'up'){
+    //   imageDirection = 'rightFront' 
+    // } else if (direction === 'left' && lastDirection !== 'up'){
+    //   imageDirection = 'leftFront' 
+    // } else if (direction === 'up' && lastDirection !== 'right'){
+    //   imageDirection = 'leftBack' 
+    // } else if (direction === 'up' && lastDirection !== 'left'){
+    //   imageDirection = 'rightBack' 
+    // } else if (direction === 'down' && lastDirection !== 'left'){
+    //   imageDirection = 'rightFront' 
+    // } else if (direction === 'down' && lastDirection !== 'right'){
+    //   imageDirection = 'leftFront' 
+    // } else if (direction === 'left'){
+    //   imageDirection = 'leftFront' 
+    // } else if (direction === 'right'){
+    //   imageDirection = 'rightFront' 
+    // } else imageDirection = 'leftFront' 
 
-    return imageDirection
+    // return imageDirection
+
+    const tarRelPos = this.findPokeProp(item, 'tarRelPos')
+    if (tarRelPos[0] === 'left' && tarRelPos[1] === 'above') {
+      return 'leftBack'
+    } else if (tarRelPos[0] === 'right' && (tarRelPos[1] === 'below' || tarRelPos[1] === 'same')) {
+      return 'rightFront'
+    }
   }
 
   findHealth(item){
