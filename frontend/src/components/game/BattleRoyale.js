@@ -225,7 +225,7 @@ speed: '???',
               deployed[pokemon].target = ['id placeholder', 'index placeholder', 'closeness placeholder']
               deployed[pokemon].pokeTimer = 'placeholder'
               deployed[pokemon].direction = this.randomDirection()
-              deployed[pokemon].attackCounter = 2
+              deployed[pokemon].attackCounter = 5
               deployed[pokemon].currentHealth = deployed[pokemon].hp
               deployed[pokemon].previousHealth = deployed[pokemon].hp
               deployed[pokemon].damageReceived = 'none'
@@ -415,6 +415,7 @@ speed: '???',
       deployed[target[0]].currentHealth = deployed[target[0]].currentHealth - this.damageCalculator(attack, defence, attType, defTyp1, defTyp2)
       deployed[target[0]].damageReceived = attType
       deployed[_id].attackCounter = 0
+      deployed[_id].tarRelPos = tarRelPos
       // console.log(pokemon.name, 'did', this.damageCalculator(attack, defence, attType, defTyp1, defTyp2), 'physical', attType, 'damage against', deployed[target[0]].name, tarRelPos[0], tarRelPos[1])
     // }
     //! the below code is for ranged attacks which has been commented out for the time being
@@ -432,6 +433,8 @@ speed: '???',
       }, 25)  
       attacks[attId].attackTimer = this.attackTimer
     }
+    // deployed[_id].tarRelPos = tarRelPos
+
     this.setState({ deployed, attacks, grid })
     // console.log(this.state.attacks)
   }
