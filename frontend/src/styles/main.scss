@@ -97,8 +97,13 @@ div.pokeIndex {
   // clip: rect(40px,60px,200px,0px);
 }
 
+div.attack {
+  background-size: cover;
+}
+
 div.fire {
-  background-color: orangered;
+  // background-color: orangered;
+  background-image: url('./../assets/attacks/fire.gif');
 }
 
 div.water {
@@ -130,7 +135,8 @@ div.normal {
 }
 
 div.electric {
-  background-color: yellow;
+  // background-color: yellow;
+  background-image: url('./../assets/attacks/electric2.gif');
 }
 
 div.ice {
