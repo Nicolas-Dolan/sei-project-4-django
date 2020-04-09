@@ -97,12 +97,51 @@ div.pokeIndex {
   // clip: rect(40px,60px,200px,0px);
 }
 
+@-webkit-keyframes pulse {
+  from {
+    -webkit-transform: scale3d(0.5, 0.5, 0.5);
+    transform: scale3d(0.5, 0.5, 0.5);
+  }
+
+  50% {
+    -webkit-transform: scale3d(1.05, 1.05, 1.05);
+    transform: scale3d(1.05, 1.05, 1.05);
+  }
+
+  to {
+    -webkit-transform: scale3d(0.5, 0.5, 0.5);
+    transform: scale3d(0.5, 0.5, 0.5);
+  }
+}
+
+@keyframes pulse {
+  from {
+    -webkit-transform: scale3d(0.5, 0.5, 0.5);
+    transform: scale3d(0.5, 0.5, 0.5);
+  }
+
+  50% {
+    -webkit-transform: scale3d(1.05, 1.05, 1.05);
+    transform: scale3d(1.05, 1.05, 1.05);
+  }
+
+  to {
+    -webkit-transform: scale3d(0.5, 0.5, 0.5);
+    transform: scale3d(0.5, 0.5, 0.5);
+  }
+}
+
+.pulse {
+  -webkit-animation-name: pulse;
+  animation-name: pulse;
+}
+
 @keyframes spin {
 	from{transform:rotate(0deg)}
 	to{transform:rotate(360deg)}	
 }
 
-@keyframes flip {
+@keyframes wiggle {
   // from{transform:scaleX(0)}
   50%{transform:rotate3d(0, 0, 1, 20deg)}	
 	// to{transform:scaleX(0)}	
@@ -123,6 +162,8 @@ div.water {
   // background-color: aqua;
   background-image: url('./../assets/attacks/bubble2.png');
   // animation: spin 0.5s linear infinite;
+  // animation: pulse 1.5s linear infinite;
+
 
 
 }
@@ -137,23 +178,28 @@ div.grass {
 div.poison {
   // background-color: purple;
   background-image: url('./../assets/attacks/poison.png');
+  animation: pulse 1.5s linear infinite;
+
 }
 
 div.flying {
   // background-color: lightgray;
   background-image: url('./../assets/attacks/twister.png');
-  animation: flip 0.5s linear infinite;
+  animation: wiggle 0.5s linear infinite;
 
 }
 
 div.psychic {
   // background-color: palevioletred;
-  background-image: url('./../assets/attacks/psychic.png');
+  background-image: url('./../assets/attacks/psychic.gif');
 
 }
 
-div.fighting {
-  background-color: darkblue;
+div.fighting:not(.pokemon) {
+  // background-color: darkblue;
+  background-image: url('./../assets/attacks/fighting2.gif');
+  animation: spin 0.3s linear infinite;
+
 }
 
 div.normal {
@@ -169,27 +215,36 @@ div.electric {
 
 div.ice {
   // background-color: lightblue;
-  background-image: url('./../assets/attacks/ice.png');
-  // animation: spin 0.8s linear infinite;
-
+  background-image: url('./../assets/attacks/snow2.png');
+  animation: spin 4s linear infinite;
+  // background-size: auto 100%;
 }
 
 div.ground {
-  background-color: brown;
+  // background-color: brown;
+  background-image: url('./../assets/attacks/ground2.gif');
+  // background-size: 200%;
+
 }
 
 div.bug {
   // background-color: lightgreen;
   background-image: url('./../assets/attacks/bug.png');
+  animation: pulse 0.3s linear infinite;
 
 }
 
 div.rock {
-  background-color: gray;
+  // background-color: gray;
+  background-image: url('./../assets/attacks/rock2.png');
+
 }
 
 div.ghost {
-  background-color: darkslateblue;
+  // background-color: darkslateblue;
+  background-image: url('./../assets/attacks/ghost.png');
+  animation: spin 3s linear infinite;
+
 }
 
 div.dragon {
@@ -197,17 +252,25 @@ div.dragon {
   background-image: url('./../assets/attacks/dragon.gif');
 }
 
-div.dark {
-  background-color: black;
+div.dark:not(.pokemon) {
+  // background-color: black;
+  background-image: url('./../assets/attacks/dark.gif');
+  animation: spin 0.3s linear infinite;
+
 }
 
 div.steel {
-  background-color: silver;
+  // background-color: silver;
+  background-image: url('./../assets/attacks/steel4.png');
+  animation: spin 0.6s linear infinite;
+  background-size: auto 100%;
+
 }
 
 div.fairy {
   // background-color: pink;
   background-image: url('./../assets/attacks/fairy.png');
+  animation: pulse 0.3s linear infinite;
 
 }
 
