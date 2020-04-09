@@ -97,8 +97,21 @@ div.pokeIndex {
   // clip: rect(40px,60px,200px,0px);
 }
 
+@keyframes spin {
+	from{transform:rotate(0deg)}
+	to{transform:rotate(360deg)}	
+}
+
+@keyframes flip {
+  // from{transform:scaleX(0)}
+  50%{transform:rotate3d(0, 0, 1, 20deg)}	
+	// to{transform:scaleX(0)}	
+}
+
+
 div.attack {
-  background-size: cover;
+  background-size: 14.4px;
+  background-repeat: no-repeat;
 }
 
 div.fire {
@@ -107,23 +120,36 @@ div.fire {
 }
 
 div.water {
-  background-color: aqua;
+  // background-color: aqua;
+  background-image: url('./../assets/attacks/bubble2.png');
+  // animation: spin 0.5s linear infinite;
+
+
 }
 
 div.grass {
-  background-color: green;
+  // background-color: green;
+  background-image: url('./../assets/attacks/leaf.png');
+  animation: spin 0.5s linear infinite;
+
 }
 
 div.poison {
-  background-color: purple;
+  // background-color: purple;
+  background-image: url('./../assets/attacks/poison.png');
 }
 
 div.flying {
-  background-color: lightgray;
+  // background-color: lightgray;
+  background-image: url('./../assets/attacks/twister.png');
+  animation: flip 0.5s linear infinite;
+
 }
 
 div.psychic {
-  background-color: palevioletred;
+  // background-color: palevioletred;
+  background-image: url('./../assets/attacks/psychic.png');
+
 }
 
 div.fighting {
@@ -131,16 +157,21 @@ div.fighting {
 }
 
 div.normal {
-  background-color: white;
+  // background-color: white;
+  background-image: url('./../assets/attacks/normal.gif');
+
 }
 
 div.electric {
   // background-color: yellow;
-  background-image: url('./../assets/attacks/electric2.gif');
+  background-image: url('./../assets/attacks/elec4.gif');
 }
 
 div.ice {
-  background-color: lightblue;
+  // background-color: lightblue;
+  background-image: url('./../assets/attacks/ice.png');
+  // animation: spin 0.8s linear infinite;
+
 }
 
 div.ground {
@@ -148,7 +179,9 @@ div.ground {
 }
 
 div.bug {
-  background-color: lightgreen;
+  // background-color: lightgreen;
+  background-image: url('./../assets/attacks/bug.png');
+
 }
 
 div.rock {
@@ -160,7 +193,8 @@ div.ghost {
 }
 
 div.dragon {
-  background-color: blue;
+  // background-color: blue;
+  background-image: url('./../assets/attacks/dragon.gif');
 }
 
 div.dark {
@@ -172,7 +206,9 @@ div.steel {
 }
 
 div.fairy {
-  background-color: pink;
+  // background-color: pink;
+  background-image: url('./../assets/attacks/fairy.png');
+
 }
 
 .viewCard {
