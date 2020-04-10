@@ -148,118 +148,126 @@ div.pokeIndex {
 }
 
 
-div.attack {
-  background-size: 14.4px;
+.attackDiv {
+  background-size: contain;
   background-repeat: no-repeat;
+  transform: translate(-2.5px, -2.5px);
 }
 
-div.fire {
+div.fire > div.attackDiv {
   // background-color: orangered;
   background-image: url('./../assets/attacks/fire.gif');
 }
 
-div.water {
+div.water > div.attackDiv {
   // background-color: aqua;
   background-image: url('./../assets/attacks/bubble2.png');
   // animation: spin 0.5s linear infinite;
   // animation: pulse 1.5s linear infinite;
+  background-size: 70%;
+  background-position: center;
 
 
 
 }
 
-div.grass {
+div.grass > div.attackDiv {
   // background-color: green;
   background-image: url('./../assets/attacks/leaf.png');
   animation: spin 0.5s linear infinite;
 
 }
 
-div.poison {
+div.poison > div.attackDiv {
   // background-color: purple;
   background-image: url('./../assets/attacks/poison.png');
-  animation: pulse 1.5s linear infinite;
+  // animation: pulse 1.5s linear infinite;
 
 }
 
-div.flying {
+div.flying > div.attackDiv {
   // background-color: lightgray;
   background-image: url('./../assets/attacks/twister.png');
   animation: wiggle 0.5s linear infinite;
 
 }
 
-div.psychic {
+div.psychic > div.attackDiv {
   // background-color: palevioletred;
   background-image: url('./../assets/attacks/psychic.gif');
-
+  background-size: 85%;
+  background-position: center;
 }
 
-div.fighting:not(.pokemon) {
+div.fighting > div.attackDiv {
   // background-color: darkblue;
   background-image: url('./../assets/attacks/fighting2.gif');
   animation: spin 0.3s linear infinite;
-
+  background-size: 90%;
+  background-position: center;
 }
 
-div.normal {
+div.normal > div.attackDiv {
   // background-color: white;
   background-image: url('./../assets/attacks/normal.gif');
 
 }
 
-div.electric {
+div.electric > div.attackDiv {
   // background-color: yellow;
   background-image: url('./../assets/attacks/elec4.gif');
+  background-size: 90%;
+  background-position: center;
 }
 
-div.ice {
+div.ice > div.attackDiv {
   // background-color: lightblue;
   background-image: url('./../assets/attacks/snow2.png');
   animation: spin 4s linear infinite;
   // background-size: auto 100%;
 }
 
-div.ground {
+div.ground > div.attackDiv {
   // background-color: brown;
   background-image: url('./../assets/attacks/ground2.gif');
   // background-size: 200%;
 
 }
 
-div.bug {
+div.bug > div.attackDiv {
   // background-color: lightgreen;
   background-image: url('./../assets/attacks/bug.png');
   animation: pulse 0.3s linear infinite;
 
 }
 
-div.rock {
+div.rock > div.attackDiv {
   // background-color: gray;
   background-image: url('./../assets/attacks/rock2.png');
 
 }
 
-div.ghost {
+div.ghost > div.attackDiv {
   // background-color: darkslateblue;
   background-image: url('./../assets/attacks/ghost.png');
   animation: spin 3s linear infinite;
 
 }
 
-div.dragon {
+div.dragon > div.attackDiv {
   // background-color: blue;
   background-image: url('./../assets/attacks/dragon.gif');
 }
 
-div.dark:not(.pokemon) {
+div.dark > div.attackDiv {
   // background-color: black;
   background-image: url('./../assets/attacks/dark.gif');
   animation: spin 0.3s linear infinite;
-
+  background-size: 85%;
+  background-position: center;
 }
 
-div.steel {
+div.steel > div.attackDiv {
   // background-color: silver;
   background-image: url('./../assets/attacks/steel4.png');
   animation: spin 0.6s linear infinite;
@@ -267,7 +275,7 @@ div.steel {
 
 }
 
-div.fairy {
+div.fairy > div.attackDiv {
   // background-color: pink;
   background-image: url('./../assets/attacks/fairy.png');
   animation: pulse 0.3s linear infinite;
