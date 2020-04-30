@@ -82,6 +82,10 @@ div.pokeIndex {
   transform: scaleX(-1)
 }
 
+.noReverse {
+  transform: scaleX(1)
+}
+
 .pokeImage {
   position: absolute;
   padding: 0;
@@ -641,6 +645,78 @@ div.scrollBox {
   animation: swing 0.8s 1;
   animation-fill-mode: none;
 }
+
+@keyframes moveDown {
+  0% {
+    -webkit-transform: translate(0, -20px);
+    transform: translate(0, -20px);
+  }
+
+  100% {
+    -webkit-transform: translate(0, 0);
+    transform: translate(0, 0);
+  }
+}
+
+  .moveDown {
+    -webkit-animation-name: moveDown;
+    animation-name: moveDown;
+    width: 200px;
+  }
+
+  @keyframes moveUp {
+    0% {
+      -webkit-transform: translate(0, 20px);
+      transform: translate(0, 20px);
+    }
+  
+    100% {
+      -webkit-transform: translate(0, 0);
+      transform: translate(0, 0);
+    }
+  }
+  
+    .moveUp {
+      -webkit-animation-name: moveUp;
+      animation-name: moveUp;
+      width: 200px;
+    }
+
+    @keyframes moveLeft {
+      0% {
+        -webkit-transform: translate(20px, 0);
+        transform: translate(20px, 0);
+      }
+    
+      100% {
+        -webkit-transform: translate(0, 0);
+        transform: translate(0, 0);
+      }
+    }
+    
+      .moveLeft {
+        -webkit-animation-name: moveLeft;
+        animation-name: moveLeft;
+        width: 200px;
+      }
+
+      @keyframes moveRight {
+        0% {
+          -webkit-transform: translate(-20px, 0);
+          transform: translate(-20px, 0);
+        }
+      
+        100% {
+          -webkit-transform: translate(0, 0);
+          transform: translate(0, 0);
+        }
+      }
+      
+        .moveRight {
+          -webkit-animation-name: moveRight;
+          animation-name: moveRight;
+          width: 200px;
+        }
 
 // @-webkit-keyframes swing2 {
 //   from {

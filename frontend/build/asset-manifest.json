@@ -1,18 +1,18 @@
 {
   "files": {
-    "main.css": "/static/css/main.7492a523.chunk.css",
-    "main.js": "/static/js/main.5afd3874.chunk.js",
-    "main.js.map": "/static/js/main.5afd3874.chunk.js.map",
+    "main.css": "/static/css/main.f4394a45.chunk.css",
+    "main.js": "/static/js/main.dd6605e4.chunk.js",
+    "main.js.map": "/static/js/main.dd6605e4.chunk.js.map",
     "runtime-main.js": "/static/js/runtime-main.1c2d59f4.js",
     "runtime-main.js.map": "/static/js/runtime-main.1c2d59f4.js.map",
     "static/css/2.5dabca3a.chunk.css": "/static/css/2.5dabca3a.chunk.css",
     "static/js/2.32325be9.chunk.js": "/static/js/2.32325be9.chunk.js",
     "static/js/2.32325be9.chunk.js.map": "/static/js/2.32325be9.chunk.js.map",
     "index.html": "/index.html",
-    "precache-manifest.14f5f24d9ebd4192fbd7c4eb217d52a1.js": "/precache-manifest.14f5f24d9ebd4192fbd7c4eb217d52a1.js",
+    "precache-manifest.017467540434826c538e3c2d52969233.js": "/precache-manifest.017467540434826c538e3c2d52969233.js",
     "service-worker.js": "/service-worker.js",
     "static/css/2.5dabca3a.chunk.css.map": "/static/css/2.5dabca3a.chunk.css.map",
-    "static/css/main.7492a523.chunk.css.map": "/static/css/main.7492a523.chunk.css.map",
+    "static/css/main.f4394a45.chunk.css.map": "/static/css/main.f4394a45.chunk.css.map",
     "static/js/2.32325be9.chunk.js.LICENSE.txt": "/static/js/2.32325be9.chunk.js.LICENSE.txt",
     "static/media/Pokemon-Logo.png": "/static/media/Pokemon-Logo.7560923d.png",
     "static/media/Professor_Oak.png": "/static/media/Professor_Oak.84043e57.png",
@@ -23,7 +23,7 @@
     "static/js/runtime-main.1c2d59f4.js",
     "static/css/2.5dabca3a.chunk.css",
     "static/js/2.32325be9.chunk.js",
-    "static/css/main.7492a523.chunk.css",
-    "static/js/main.5afd3874.chunk.js"
+    "static/css/main.f4394a45.chunk.css",
+    "static/js/main.dd6605e4.chunk.js"
   ]
 }
